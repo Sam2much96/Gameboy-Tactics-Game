@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://brstf0b1e8jvb"]
+
+[ext_resource type="Script" uid="uid://bmpjmxpy2stmh" path="res://title_screen_pointer.gd" id="5_idlfq"]
+
+[node name="Sprite2D" type="Sprite2D" unique_id=1102659336]
+position = Vector2(26, 118)
+scale = Vector2(2, 2)
+script = ExtResource("5_idlfq")

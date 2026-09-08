@@ -1,0 +1,323 @@
+[gd_scene format=3 uid="uid://c5gvpceiyhxb8"]
+
+[ext_resource type="Texture2D" uid="uid://cmsnniere3il6" path="res://character/16x16_gameboy_tileset_1.png" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cetvlu5u4ot0f" path="res://tile_map.gd" id="2_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://ch67afetg7yyl" path="res://character/16x16_gameboy_animation.png" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://csm8hry834d6w" path="res://Music.tscn" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://mw7vdd6oan7f" path="res://player_unit.gd" id="5_punit"]
+[ext_resource type="Script" uid="uid://tanh82tdbbaw" path="res://scripts/enemy_unit.gd" id="6_eunit"]
+[ext_resource type="Texture2D" uid="uid://b8cqdkcbrphac" path="res://weapons/weapons.png" id="6_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://cn14vfths8jym" path="res://character/Enemy1.png" id="7_enemy"]
+[ext_resource type="Texture2D" uid="uid://catsw766c8av0" path="res://weapons/treasure_chest.png" id="7_w48qg"]
+[ext_resource type="Script" uid="uid://vo6ugaeo462g" path="res://UI.gd" id="8_4c57u"]
+[ext_resource type="Script" uid="uid://cbm4ak8r7824m" path="res://scripts/battle_manager.gd" id="8_bmgr"]
+[ext_resource type="Theme" uid="uid://b1mvfcinrk3hc" path="res://GameboyTheme.tres" id="9_dg77c"]
+[ext_resource type="PackedScene" uid="uid://brstf0b1e8jvb" path="res://helpers/pointers.tscn" id="9_efxa6"]
+[ext_resource type="Script" uid="uid://cceair7x6gd1x" path="res://scripts/dialogue.gd" id="11_dg77c"]
+[ext_resource type="Script" uid="uid://c8cch5oy73h7o" path="res://scripts/weapon_fx.gd" id="12_wfx"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ig7tw"]
+texture = ExtResource("1_ig7tw")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+18:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_0xm2m"]
+sources/0 = SubResource("TileSetAtlasSource_ig7tw")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vivmo"]
+texture = ExtResource("1_ig7tw")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+18:0/0 = 0
+19:0/0 = 0
+20:0/0 = 0
+21:0/0 = 0
+22:0/0 = 0
+23:0/0 = 0
+24:0/0 = 0
+25:0/0 = 0
+26:0/0 = 0
+31:0/0 = 0
+32:0/0 = 0
+33:0/0 = 0
+34:0/0 = 0
+35:0/0 = 0
+36:0/0 = 0
+37:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+15:1/0 = 0
+16:1/0 = 0
+17:1/0 = 0
+18:1/0 = 0
+19:1/0 = 0
+20:1/0 = 0
+25:1/0 = 0
+26:1/0 = 0
+27:1/0 = 0
+28:1/0 = 0
+29:1/0 = 0
+30:1/0 = 0
+31:1/0 = 0
+32:1/0 = 0
+33:1/0 = 0
+34:1/0 = 0
+35:1/0 = 0
+36:1/0 = 0
+37:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_8js3f"]
+tile_size = Vector2i(8, 8)
+sources/0 = SubResource("TileSetAtlasSource_vivmo")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_efxa6"]
+texture = ExtResource("1_ig7tw")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+18:0/0 = 0
+19:0/0 = 0
+20:0/0 = 0
+21:0/0 = 0
+22:0/0 = 0
+23:0/0 = 0
+24:0/0 = 0
+25:0/0 = 0
+26:0/0 = 0
+31:0/0 = 0
+32:0/0 = 0
+33:0/0 = 0
+34:0/0 = 0
+35:0/0 = 0
+36:0/0 = 0
+37:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+15:1/0 = 0
+16:1/0 = 0
+17:1/0 = 0
+18:1/0 = 0
+19:1/0 = 0
+20:1/0 = 0
+25:1/0 = 0
+26:1/0 = 0
+27:1/0 = 0
+28:1/0 = 0
+29:1/0 = 0
+30:1/0 = 0
+31:1/0 = 0
+32:1/0 = 0
+33:1/0 = 0
+34:1/0 = 0
+35:1/0 = 0
+36:1/0 = 0
+37:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_kek77"]
+tile_size = Vector2i(8, 8)
+sources/0 = SubResource("TileSetAtlasSource_efxa6")
+
+[node name="Node2D" type="Node2D" unique_id=984176973]
+script = ExtResource("8_bmgr")
+
+[node name="TileMap" type="TileMap" parent="." unique_id=2142254483]
+tile_set = SubResource("TileSet_0xm2m")
+format = 2
+layer_1/name = "Layer1"
+script = ExtResource("2_0xm2m")
+
+[node name="Player" type="Sprite2D" parent="." unique_id=1012912622]
+texture_filter = 2
+position = Vector2(8, 8)
+texture = ExtResource("3_1bvp3")
+hframes = 7
+script = ExtResource("5_punit")
+
+[node name="Weapon" type="Sprite2D" parent="." unique_id=1605774942]
+position = Vector2(9, -10)
+texture = ExtResource("6_ycdy4")
+hframes = 8
+script = ExtResource("12_wfx")
+
+[node name="Chest" type="Sprite2D" parent="." unique_id=1047857888]
+visible = false
+position = Vector2(35, 31)
+texture = ExtResource("7_w48qg")
+hframes = 2
+
+[node name="Enemy" type="Sprite2D" parent="." unique_id=1387766000]
+texture_filter = 2
+position = Vector2(34, 10)
+texture = ExtResource("7_enemy")
+hframes = 4
+script = ExtResource("6_eunit")
+grid_pos = Vector2i(7, 7)
+
+[node name="Enemy2" type="Sprite2D" parent="." unique_id=1963079709]
+texture_filter = 2
+position = Vector2(67, 36)
+texture = ExtResource("7_enemy")
+hframes = 4
+script = ExtResource("6_eunit")
+grid_pos = Vector2i(7, 7)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1417517611]
+position = Vector2(80, 80)
+zoom = Vector2(6, 6)
+
+[node name="WindowLayer" type="CanvasLayer" parent="." unique_id=147856844]
+
+[node name="Dialogue_UI" type="TileMap" parent="WindowLayer" unique_id=614119415]
+position = Vector2(-5, -12)
+tile_set = SubResource("TileSet_8js3f")
+rendering_quadrant_size = 8
+format = 2
+layer_0/tile_data = PackedInt32Array(851969, 1310720, 0, 917505, 1310720, 1, 983041, 1310720, 1, 1048577, 1703936, 1, 1048578, 1769472, 1, 1048579, 1769472, 1, 1048580, 1769472, 1, 1048581, 1769472, 1, 1048582, 1769472, 1, 1048583, 1769472, 1, 1048584, 1769472, 1, 1048585, 1769472, 1, 1048586, 1769472, 1, 1048587, 1769472, 1, 1048588, 1769472, 1, 1048589, 1769472, 1, 1048590, 1769472, 1, 1048591, 1769472, 1, 1048592, 1769472, 1, 1048593, 1769472, 1, 1048594, 2031616, 1, 983058, 2031616, 0, 917522, 2031616, 0, 851986, 1638400, 0, 851985, 1572864, 0, 851984, 1572864, 0, 851983, 1572864, 0, 851982, 1572864, 0, 851981, 1572864, 0, 851980, 1572864, 0, 851979, 1572864, 0, 851978, 1572864, 0, 851977, 1572864, 0, 851976, 1572864, 0, 851975, 1572864, 0, 851974, 1572864, 0, 851973, 1572864, 0, 851972, 1572864, 0, 851971, 1572864, 0, 851970, 1572864, 0, 917506, 2097152, 0, 983042, 2097152, 0, 983043, 2097152, 0, 983044, 2097152, 0, 917508, 2097152, 0, 917507, 2097152, 0, 917509, 2097152, 0, 983045, 2097152, 0, 983046, 2097152, 0, 917510, 2097152, 0, 917511, 2097152, 0, 983047, 2097152, 0, 983048, 2097152, 0, 917512, 2097152, 0, 917513, 2097152, 0, 983049, 2097152, 0, 983050, 2097152, 0, 917514, 2097152, 0, 917515, 2097152, 0, 983051, 2097152, 0, 983052, 2097152, 0, 917516, 2097152, 0, 917517, 2097152, 0, 983053, 2097152, 0, 983054, 2097152, 0, 917518, 2097152, 0, 917519, 2097152, 0, 983055, 2097152, 0, 983056, 2097152, 0, 917520, 2097152, 0, 917521, 2097152, 0, 983057, 2097152, 0)
+script = ExtResource("11_dg77c")
+
+[node name="Control" type="Control" parent="WindowLayer/Dialogue_UI" unique_id=1979181178]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="WindowLayer/Dialogue_UI/Control" unique_id=800619224]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 112.0
+offset_right = 143.0
+offset_bottom = 128.0
+theme = ExtResource("9_dg77c")
+text = "Lorem ipsum dolor sit amet consectetur adipiscing"
+autowrap_mode = 3
+
+[node name="UI_Menu" type="TileMap" parent="WindowLayer" unique_id=1881605668]
+tile_set = SubResource("TileSet_kek77")
+format = 2
+layer_0/tile_data = PackedInt32Array(1, 1310720, 0, 65537, 1310720, 1, 131073, 1310720, 1, 196609, 1310720, 1, 262145, 1310720, 1, 327681, 1310720, 1, 393217, 1310720, 1, 458753, 1310720, 1, 524289, 1310720, 1, 589825, 1703936, 1, 589826, 1769472, 1, 589827, 1769472, 1, 589828, 1769472, 1, 589829, 1769472, 1, 589830, 1769472, 1, 589831, 1769472, 1, 589832, 1769472, 1, 589833, 1769472, 1, 589834, 2031616, 1, 589835, 1703936, 1, 589836, 1769472, 1, 589837, 1769472, 1, 589838, 1769472, 1, 589839, 1769472, 1, 589840, 2031616, 1, 524304, 2031616, 0, 458768, 2031616, 0, 393232, 2031616, 0, 327696, 2031616, 0, 262160, 2031616, 0, 196624, 2031616, 0, 131088, 2031616, 0, 65552, 2031616, 0, 16, 1638400, 0, 15, 1572864, 0, 14, 1572864, 0, 13, 1572864, 0, 12, 1572864, 0, 11, 1310720, 0, 10, 1638400, 0, 9, 1572864, 0, 8, 1572864, 0, 7, 1572864, 0, 6, 1572864, 0, 5, 1572864, 0, 4, 1572864, 0, 3, 1572864, 0, 2, 1572864, 0, 65538, 2097152, 1, 131074, 2097152, 1, 196610, 2097152, 1, 262146, 2097152, 1, 327682, 2097152, 1, 393218, 2097152, 1, 393219, 2097152, 1, 458755, 2097152, 1, 458754, 2097152, 1, 524290, 2097152, 1, 524291, 2097152, 1, 524292, 2097152, 1, 524293, 2097152, 1, 524294, 2097152, 1, 458759, 2097152, 1, 458760, 2097152, 1, 524296, 2097152, 1, 524297, 2097152, 1, 524295, 2097152, 1, 262152, 2097152, 1, 196616, 2097152, 1, 131080, 2097152, 1, 65544, 2097152, 1, 65543, 2097152, 1, 65542, 2097152, 1, 65541, 2097152, 1, 65540, 2097152, 1, 65539, 2097152, 1, 131075, 2097152, 1, 196611, 2097152, 1, 262147, 2097152, 1, 327683, 2097152, 1, 327684, 2097152, 1, 262148, 2097152, 1, 196612, 2097152, 1, 131076, 2097152, 1, 131077, 2097152, 1, 196613, 2097152, 1, 262149, 2097152, 1, 327685, 2097152, 1, 393221, 2097152, 1, 393220, 2097152, 1, 458756, 2097152, 1, 458757, 2097152, 1, 458758, 2097152, 1, 393222, 2097152, 1, 327686, 2097152, 1, 262150, 2097152, 1, 196614, 2097152, 1, 131078, 2097152, 1, 131079, 2097152, 1, 196615, 2097152, 1, 262151, 2097152, 1, 327687, 2097152, 1, 393223, 2097152, 1, 393224, 2097152, 1, 327688, 2097152, 1, 327689, 2097152, 1, 262153, 2097152, 1, 196617, 2097152, 1, 131081, 2097152, 1, 65545, 2097152, 1, 65546, 2031616, 0, 131082, 2031616, 0, 196618, 2031616, 0, 262154, 2031616, 0, 327690, 2031616, 0, 393226, 2031616, 0, 393225, 2097152, 1, 458761, 2097152, 1, 458762, 2031616, 0, 524298, 2031616, 0, 524299, 1703936, 0, 458763, 1703936, 0, 393227, 1703936, 0, 327691, 1703936, 0, 262155, 1703936, 0, 196619, 1703936, 0, 131083, 1703936, 0, 65547, 1703936, 0, 65548, 2097152, 1, 131084, 2097152, 1, 196620, 2097152, 1, 262156, 2097152, 1, 327692, 2097152, 1, 393228, 2097152, 1, 458764, 2097152, 1, 524300, 2097152, 1, 524301, 2097152, 1, 458765, 2097152, 1, 393229, 2097152, 1, 327693, 2097152, 1, 262157, 2097152, 1, 196621, 2097152, 1, 131085, 2097152, 1, 65549, 2097152, 1, 65550, 2097152, 1, 131086, 2097152, 1, 196622, 2097152, 1, 262158, 2097152, 1, 327694, 2097152, 1, 393230, 2097152, 1, 458766, 2097152, 1, 524302, 2097152, 1, 524303, 2097152, 1, 458767, 2097152, 1, 393231, 2097152, 1, 327695, 2097152, 1, 262159, 2097152, 1, 196623, 2097152, 1, 131087, 2097152, 1, 65551, 2097152, 1)
+script = ExtResource("8_4c57u")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WindowLayer/UI_Menu" unique_id=111809785]
+offset_left = 18.0
+offset_top = 10.000001
+offset_right = 146.0
+offset_bottom = 102.0
+scale = Vector2(0.50269157, 0.50269157)
+
+[node name="Button" type="Button" parent="WindowLayer/UI_Menu/VBoxContainer" unique_id=446761638]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Button2")
+theme = ExtResource("9_dg77c")
+text = "Attack"
+flat = true
+
+[node name="Button2" type="Button" parent="WindowLayer/UI_Menu/VBoxContainer" unique_id=49846018]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Button")
+focus_neighbor_bottom = NodePath("../Button3")
+theme = ExtResource("9_dg77c")
+text = "Magic"
+flat = true
+
+[node name="Button3" type="Button" parent="WindowLayer/UI_Menu/VBoxContainer" unique_id=2122353457]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Button2")
+theme = ExtResource("9_dg77c")
+text = "End turn"
+flat = true
+
+[node name="Sprite2D" parent="WindowLayer/UI_Menu" unique_id=1102659336 instance=ExtResource("9_efxa6")]
+scale = Vector2(1, 1)
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="WindowLayer/UI_Menu" unique_id=1912700764]
+offset_left = 101.0
+offset_top = 13.0
+offset_right = 141.0
+offset_bottom = 53.0
+theme = ExtResource("9_dg77c")
+
+[node name="Label" type="Label" parent="WindowLayer/UI_Menu/VBoxContainer2" unique_id=781453674]
+layout_mode = 2
+text = "HP"
+
+[node name="Label2" type="Label" parent="WindowLayer/UI_Menu/VBoxContainer2" unique_id=715551851]
+layout_mode = 2
+text = "ATK"
+
+[node name="Label3" type="Label" parent="WindowLayer/UI_Menu/VBoxContainer2" unique_id=246978633]
+layout_mode = 2
+text = "DEF"
+
+[node name="Label4" type="Label" parent="WindowLayer/UI_Menu/VBoxContainer2" unique_id=1778024106]
+layout_mode = 2
+text = "HP"
+
+[node name="Music" parent="." unique_id=1980606139 instance=ExtResource("4_1bvp3")]

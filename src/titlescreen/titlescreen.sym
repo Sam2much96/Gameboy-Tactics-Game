@@ -1,0 +1,51 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+    _LCDC_REG                                                       ******** GX
+    _OBP0_REG                                                       ******** GX
+    _OBP1_REG                                                       ******** GX
+  0 _TITLE_MENU_PTR_X                                               00001360 R
+  0 _TITLE_MENU_TEXT_X                                              00001363 R
+  0 _TITLE_MENU_Y                                                   0000135D R
+    _gbt_update                                                     ******** GX
+    _joypad                                                         ******** GX
+  0 _place_text                                                     00000000 R
+    _pointer_anim_select                                            ******** GX
+    _pointer_hide                                                   ******** GX
+    _pointer_init                                                   ******** GX
+    _pointer_move                                                   ******** GX
+  0 _run_titlescreen                                                000011DA GR
+    _set_bkg_data                                                   ******** GX
+    _set_bkg_tiles                                                  ******** GX
+    _set_sprite_data                                                ******** GX
+    _shadow_OAM                                                     ******** GX
+  0 _tiles_continue                                                 000011CD R
+  0 _tiles_multi                                                    000011D5 R
+  0 _tiles_start                                                    000011C8 R
+  0 _title_font                                                     00001108 R
+  0 _titlescreen_data                                               00000070 GR
+  0 _titlescreen_map                                                00000FA0 GR
+    _wait_vbl_done                                                  ******** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size     1366   flags    0
+   1 _DATA                                      size        0   flags    0
+   2 _INITIALIZED                               size        0   flags    0
+   3 _DABS                                      size        0   flags    8
+   4 _HOME                                      size        0   flags    0
+   5 _GSINIT                                    size        0   flags    0
+   6 _GSFINAL                                   size        0   flags    0
+   7 _INITIALIZER                               size        0   flags    0
+   8 _CABS                                      size        0   flags    8
+

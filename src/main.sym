@@ -1,0 +1,155 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+    _BGP_REG                                                        ******** GX
+    _LCDC_REG                                                       ******** GX
+    _OBP0_REG                                                       ******** GX
+    _OBP1_REG                                                       ******** GX
+  3 _Player                                                         00000000 GR
+    _Selector                                                       ******** GX
+    _Tileset                                                        ******** GX
+    _UI                                                             ******** GX
+  0 _UI_MENU_Y                                                      00000234 R
+    _UI_Tiles                                                       ******** GX
+    _WX_REG                                                         ******** GX
+    _WY_REG                                                         ******** GX
+  0 ___str_0                                                        0000032F R
+  0 ___str_1                                                        00000335 R
+  0 ___str_2                                                        0000033C R
+  0 ___str_3                                                        00000340 R
+  0 ___str_4                                                        00000343 R
+    __moduint                                                       ******** GX
+  8 __xinit__Player                                                 00000000 R
+  8 __xinit__cursor_x                                               00000101 R
+  8 __xinit__cursor_y                                               00000102 R
+  8 __xinit__input_timer                                            00000103 R
+  8 __xinit__move_path_len                                          00000109 R
+  8 __xinit__move_path_step                                         0000010A R
+  8 __xinit__move_timer                                             0000010B R
+  8 __xinit__player_grid_x                                          0000010C R
+  8 __xinit__player_grid_y                                          0000010D R
+  8 __xinit__prev_keys                                              00000104 R
+  8 __xinit__spritesize                                             00000100 R
+  8 __xinit__ui_anim                                                00000107 R
+  8 __xinit__ui_anim_row                                            00000108 R
+  8 __xinit__ui_menu_idx                                            00000106 R
+  8 __xinit__ui_visible                                             00000105 R
+    _astar_find                                                     ******** GX
+  0 _attack_frames_down                                             0000001B R
+  0 _attack_frames_left                                             0000001C R
+  0 _attack_frames_right                                            0000001D R
+  0 _attack_frames_up                                               0000001E R
+  0 _clear_overlay                                                  00000395 GR
+  0 _clear_path_tiles                                               000002C3 R
+  3 _cursor_x                                                       00000101 GR
+  3 _cursor_y                                                       00000102 GR
+    _display_off                                                    ******** GX
+  0 _draw_cursor                                                    000003EB GR
+  0 _draw_grid                                                      00000396 GR
+  0 _draw_path_tiles                                                0000028D R
+  2 _enemy                                                          00000008 GR
+  0 _fadein                                                         000004BB GR
+  0 _fadeout                                                        00000475 GR
+    _font_init                                                      ******** GX
+    _font_load                                                      ******** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    _font_min                                                       ******** GX
+    _gbt_loop                                                       ******** GX
+    _gbt_play                                                       ******** GX
+    _gbt_update                                                     ******** GX
+  0 _gbtd_tile                                                      00000031 R
+  2 _grid                                                           00000011 GR
+  0 _handle_input                                                   00000404 GR
+  2 _i                                                              00000010 GR
+  0 _idle_frames_down                                               00000013 R
+  0 _idle_frames_left                                               00000014 R
+  0 _idle_frames_right                                              00000015 R
+  0 _idle_frames_up                                                 00000016 R
+  0 _init_grid                                                      00000347 GR
+  0 _init_overlay                                                   0000036F GR
+  3 _input_timer                                                    00000103 GR
+  0 _is_walkable                                                    000005AD R
+    _joypad                                                         ******** GX
+  0 _main                                                           000005C9 GR
+  2 _move_path                                                      000000F8 GR
+  3 _move_path_len                                                  00000109 GR
+  3 _move_path_step                                                 0000010A GR
+  3 _move_timer                                                     0000010B GR
+  0 _movegamecharacter                                              00000533 GR
+  0 _performantdelay                                                00000469 GR
+  2 _player                                                         00000000 GR
+  2 _player_anim                                                    000000F4 R
+  0 _player_anim_apply                                              0000016D GR
+  0 _player_anim_init                                               00000138 GR
+  0 _player_anim_set_dir                                            0000014B GR
+  0 _player_anim_set_state                                          00000158 GR
+  0 _player_anim_tick                                               0000019A GR
+  3 _player_grid_x                                                  0000010C GR
+  3 _player_grid_y                                                  0000010D GR
+    _pointer_anim_select                                            ******** GX
+    _pointer_hide                                                   ******** GX
+    _pointer_init                                                   ******** GX
+    _pointer_move                                                   ******** GX
+  3 _prev_keys                                                      00000104 GR
+  0 _restore_bkg_tile                                               00000259 R
+    _run_titlescreen                                                ******** GX
+    _set_bkg_data                                                   ******** GX
+    _set_bkg_tiles                                                  ******** GX
+    _set_interrupts                                                 ******** GX
+    _set_sprite_data                                                ******** GX
+    _set_win_tiles                                                  ******** GX
+  0 _setupPlayer                                                    000004F3 GR
+    _shadow_OAM                                                     ******** GX
+    _song_Data                                                      ******** GX
+  3 _spritesize                                                     00000100 GR
+  0 _state_frame_count                                              00000000 R
+  0 _state_speed                                                    0000001F R
+  3 _ui_anim                                                        00000107 R
+  3 _ui_anim_row                                                    00000108 R
+  3 _ui_menu_idx                                                    00000106 GR
+    _ui_print                                                       ******** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    _ui_print_uint8                                                 ******** GX
+  2 _ui_ptr                                                         000000F2 GR
+  3 _ui_visible                                                     00000105 GR
+  0 _ui_write_text                                                  000002E1 R
+    _wait_vbl_done                                                  ******** GX
+  0 _walk_frames_down                                               00000017 R
+  0 _walk_frames_left                                               00000018 R
+  0 _walk_frames_right                                              00000019 R
+  0 _walk_frames_up                                                 0000001A R
+  0 _win_clear_row                                                  00000237 R
+  2 _win_row_buf                                                    00000138 R
+  0 _win_write_row                                                  000001E3 R
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 4
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size      965   flags    0
+   1 _HRAM                                      size        0   flags    0
+   2 _DATA                                      size      14C   flags    0
+   3 _INITIALIZED                               size      10E   flags    0
+   4 _DABS                                      size        0   flags    8
+   5 _HOME                                      size        0   flags    0
+   6 _GSINIT                                    size        0   flags    0
+   7 _GSFINAL                                   size        0   flags    0
+   8 _INITIALIZER                               size      10E   flags    0
+   9 _CABS                                      size        0   flags    8
+

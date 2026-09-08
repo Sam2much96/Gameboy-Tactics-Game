@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://b74sl7gihnnew"]
+
+[ext_resource type="Script" uid="uid://b54rppmwb5xfp" path="res://title_screen.gd" id="1_qrdoq"]
+[ext_resource type="Texture2D" uid="uid://cqqdti8kvg87y" path="res://art/titlescreen.png" id="2_umdec"]
+[ext_resource type="Theme" uid="uid://b1mvfcinrk3hc" path="res://GameboyTheme.tres" id="3_pttdg"]
+[ext_resource type="PackedScene" uid="uid://brstf0b1e8jvb" path="res://helpers/pointers.tscn" id="3_umdec"]
+[ext_resource type="PackedScene" uid="uid://csm8hry834d6w" path="res://Music.tscn" id="5_umdec"]
+
+[node name="Title" type="Control" unique_id=1531100983]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qrdoq")
+
+[node name="Control" type="Control" parent="." unique_id=250221727]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(4.671935, 4.671935)
+
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=196108770]
+layout_mode = 0
+offset_right = 251.92989
+offset_bottom = 145.54997
+color = Color(0.9098039, 0.9764706, 0.7490196, 1)
+
+[node name="TextureRect" type="TextureRect" parent="Control" unique_id=2147293623]
+layout_mode = 0
+offset_left = 41.31051
+offset_top = -0.8561759
+offset_right = 1192.4216
+offset_bottom = 1035.1438
+scale = Vector2(0.14087951, 0.14087951)
+texture = ExtResource("2_umdec")
+
+[node name="Sprite2D" parent="Control" unique_id=1102659336 instance=ExtResource("3_umdec")]
+position = Vector2(5.565146, 25.257202)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=587999003]
+layout_mode = 0
+offset_left = 32.748745
+offset_top = 78.98227
+offset_right = 590.7487
+offset_bottom = 299.98227
+scale = Vector2(0.2945708, 0.2945708)
+focus_neighbor_bottom = NodePath("Button2")
+
+[node name="Button" type="Button" parent="Control/VBoxContainer" unique_id=372265644]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Button2")
+theme = ExtResource("3_pttdg")
+theme_override_font_sizes/font_size = 50
+text = "Start"
+flat = true
+
+[node name="Button2" type="Button" parent="Control/VBoxContainer" unique_id=928229673]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Button")
+focus_neighbor_bottom = NodePath("../Button3")
+theme = ExtResource("3_pttdg")
+theme_override_font_sizes/font_size = 50
+text = "Continue
+"
+flat = true
+
+[node name="Button3" type="Button" parent="Control/VBoxContainer" unique_id=103571078]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Button2")
+theme = ExtResource("3_pttdg")
+theme_override_font_sizes/font_size = 50
+text = "Multiplayer"
+flat = true
+
+[node name="Music" parent="." unique_id=594212400 instance=ExtResource("5_umdec")]
