@@ -93,7 +93,7 @@ func _on_panel_closed() -> void:
 func _on_confirm_pressed(cell: Vector2i) -> void:
 	if state != TurnState.PLAYER_TURN or ui_panel.is_open:
 		return
-	var path: Array[Vector2i] = grid_map.compute_path_for(player.grid_pos, cell, _living_enemy_cells())
+	var path: Array[Vector2i] = grid_map.compute_path_for(player.grid_pos, cell, Enemy._living_enemy_cells(enemies))
 	if path.size() < 2:
 		return
 	var truncated := path.size() - 1 > PLAYER_MOVE_RANGE
@@ -132,7 +132,11 @@ func _on_action_chosen(action: String) -> void:
 			_try_player_attack(true)
 		"end":
 			ui_panel.close()
-			_start_enemy_turn()
+			#state : int, tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager
+			Enemy._start_enemy_turn(get_tree(),enemies, player,grid_map, weapon_fx,self)
+
+# to do:
+# (1) move to a player class
 
 ## Closes the panel only once the action actually succeeds — a failed
 ## attempt (out of range, not enough MP) leaves it open so the player can
@@ -143,11 +147,11 @@ func _on_action_chosen(action: String) -> void:
 ## new targeting feature), so ATTACK/MAGIC auto-target the nearest living
 ## enemy, same as most SRPGs default to when a target isn't chosen by hand.
 func _try_player_attack(is_magic: bool) -> void:
-	var target := _nearest_enemy(player.grid_pos)
+	var target := Enemy._nearest_enemy(player.grid_pos, enemies)
 	if target == null:
 		return
 
-	var dist := _distance(player.grid_pos, target.grid_pos)
+	var dist := Utils._distance(player.grid_pos, target.grid_pos)
 	var range_limit := MAGIC_RANGE if is_magic else ATTACK_RANGE
 
 	if is_magic and player.mp < MAGIC_COST:
@@ -196,100 +200,15 @@ func _try_player_attack(is_magic: bool) -> void:
 		# are dead).
 		await target.play_defeat()
 
-	if _all_enemies_defeated():
+	if Enemy._all_enemies_defeated(enemies):
 		await _end_battle("GAME WON")
 		return
+	#state : int, tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager
+	Enemy._start_enemy_turn( get_tree(), enemies,player,grid_map,weapon_fx,self)
 
-	_start_enemy_turn()
 
-"Enemy AI Logic"
-#1. Not adjacent to the player (_distance > 1) → find the nearest walkable cell next to the player (_adjacent_cell_near), pathfind to it (grid_map.compute_path_for), and move (capped by ENEMY_MOVE_RANGE).
-#2. Adjacent to the player (checked again after moving, in case the move closed the gap) → face the player and attack with a basic melee hit (e.atk - player.def, minimum 1).'''
 
-## Each living enemy acts once, in array order (the order they were
-## discovered under the scene root in _ready()) — not simultaneously, so two
-## enemies can't both path into the same cell at once. Blockers are
-## recomputed per-enemy (_living_enemy_cells(e) excludes e itself but
-## includes every other still-living enemy plus the player), so earlier
-## enemies in the loop already occupy their new cells by the time a later
-## one paths, the same way the player can't be pathed through either.
-func _start_enemy_turn() -> void:
-	state = TurnState.ENEMY_TURN
-	await get_tree().create_timer(0.3).timeout
 
-	for e in enemies:
-		if not e.is_alive():
-			continue
-		if not player.is_alive():
-			break
-		if _distance(e.grid_pos, player.grid_pos) > 1:
-			var target := _adjacent_cell_near(player.grid_pos, e.grid_pos)
-			# `+` between a typed Array[Vector2i] and an untyped [x] literal
-			# produces an untyped result at runtime and compute_path_for()
-			# rejects it (typed-array parameter) — append() instead of
-			# concatenating keeps the static type intact.
-			var blockers := _living_enemy_cells(e)
-			blockers.append(player.grid_pos)
-			var path: Array[Vector2i] = grid_map.compute_path_for(e.grid_pos, target, blockers)
-			if path.size() - 1 > ENEMY_MOVE_RANGE:
-				path = path.slice(0, ENEMY_MOVE_RANGE + 1)
-			if path.size() > 1:
-				await e.move_along(path)
-		if _distance(e.grid_pos, player.grid_pos) <= 1:
-			e.face_towards(player.grid_pos)
-			weapon_fx.play_swing(e.position, e.facing)
-			player.take_damage(max(1, e.atk - player.def))
-
-	if not player.is_alive():
-		await _end_battle("GAME OVER", player)
-		return
-
-	state = TurnState.PLAYER_TURN
-
-func _adjacent_cell_near(target: Vector2i, from: Vector2i) -> Vector2i:
-	var candidates := [
-		target + Vector2i(1, 0), target + Vector2i(-1, 0),
-		target + Vector2i(0, 1), target + Vector2i(0, -1),
-	]
-	candidates.sort_custom(func(a, b): return _distance(a, from) < _distance(b, from))
-	for c in candidates:
-		if grid_map.is_within_grid(c) and c != target:
-			return c
-	return from
-
-func _distance(a: Vector2i, b: Vector2i) -> int:
-	return abs(a.x - b.x) + abs(a.y - b.y)
-
-## Nearest living enemy to `from` by grid distance (ties broken by array
-## order) — null only if every enemy is already dead, which shouldn't happen
-## mid-battle since _all_enemies_defeated() ends things first.
-func _nearest_enemy(from: Vector2i) -> EnemyUnit:
-	var nearest: EnemyUnit = null
-	var nearest_dist := -1
-	for e in enemies:
-		if not e.is_alive():
-			continue
-		var d := _distance(from, e.grid_pos)
-		if nearest == null or d < nearest_dist:
-			nearest = e
-			nearest_dist = d
-	return nearest
-
-func _all_enemies_defeated() -> bool:
-	for e in enemies:
-		if e.is_alive():
-			return false
-	return true
-
-## Grid cells every living enemy occupies, used as pathfinding blockers.
-## `excluding` leaves one specific enemy out of its own list when it's that
-## enemy's turn to path (so it doesn't treat its own current cell as solid).
-func _living_enemy_cells(excluding: EnemyUnit = null) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for e in enemies:
-		if e.is_alive() and e != excluding:
-			cells.append(e.grid_pos)
-	return cells
 
 ## Square-ring search outward from `near` for the closest cell not already
 ## in `occupied` — only ever needed once, in _ready(), to un-stack a freshly
@@ -330,3 +249,113 @@ func _end_battle(message: String, defeated: Unit = null) -> void:
 	# to do:
 	# (1) implement a win and loss screen
 	get_tree().change_scene_to_packed(load("res://TItleScreen.tscn"))
+
+
+class Utils:
+	# A separate Utils class for all math helper functions
+	
+	func a() -> void:
+		pass
+	static func _distance(a: Vector2i, b: Vector2i) -> int:
+		return abs(a.x - b.x) + abs(a.y - b.y)
+
+
+# to do :
+# (1) separate player and enemy ai logic into separate classes (1/2)
+class Enemy:
+	func a() -> void: 
+		pass
+	static func _all_enemies_defeated(enemies : Array[EnemyUnit]) -> bool:
+		for e in enemies:
+			if e.is_alive():
+				return false
+		return true
+	
+	## Nearest living enemy to `from` by grid distance (ties broken by array
+	## order) — null only if every enemy is already dead, which shouldn't happen
+	## mid-battle since _all_enemies_defeated() ends things first.
+	static func _nearest_enemy(from: Vector2i, enemies : Array[EnemyUnit]) -> EnemyUnit:
+		var nearest: EnemyUnit = null
+		var nearest_dist := -1
+		for e in enemies:
+			if not e.is_alive():
+				continue
+			var d := Utils._distance(from, e.grid_pos)
+			if nearest == null or d < nearest_dist:
+				nearest = e
+				nearest_dist = d
+		return nearest
+	
+	#1. The function looks at the 4 squares touching the player: above, below, left and right.
+	#2. It picks whichever of those is closest to the enemy, so the enemy takes the shortest trip.
+	#3. It skips any square that would be off the edge of the board.
+	#4. If all 4 squares are off the board, the enemy just stays where it is.
+	static func _adjacent_cell_near(target: Vector2i, from: Vector2i, _grid_map: TacticsGrid) -> Vector2i:
+		#print_stack() # what processes call this function?
+		var candidates := [
+			target + Vector2i(1, 0), target + Vector2i(-1, 0),
+			target + Vector2i(0, 1), target + Vector2i(0, -1),
+		]
+		candidates.sort_custom(func(a, b): return Utils._distance(a, from) < Utils._distance(b, from))
+		for c in candidates:
+			if _grid_map.is_within_grid(c) and c != target:
+				return c
+		return from
+		
+	## Grid cells every living enemy occupies, used as pathfinding blockers.
+	## `excluding` leaves one specific enemy out of its own list when it's that
+	## enemy's turn to path (so it doesn't treat its own current cell as solid).
+	static func _living_enemy_cells(enemies : Array[EnemyUnit],excluding: EnemyUnit = null ) -> Array[Vector2i]:
+		var cells: Array[Vector2i] = []
+		for e in enemies:
+			if e.is_alive() and e != excluding:
+				cells.append(e.grid_pos)
+		return cells
+	
+	"Enemy AI Logic"
+	#1. Not adjacent to the player (_distance > 1) → find the nearest walkable cell next to the player (_adjacent_cell_near), pathfind to it (grid_map.compute_path_for), and move (capped by ENEMY_MOVE_RANGE).
+	#2. Adjacent to the player (checked again after moving, in case the move closed the gap) → face the player and attack with a basic melee hit (e.atk - player.def, minimum 1).'''
+
+	## Each living enemy acts once, in array order (the order they were
+	## discovered under the scene root in _ready()) — not simultaneously, so two
+	## enemies can't both path into the same cell at once. Blockers are
+	## recomputed per-enemy (_living_enemy_cells(e) excludes e itself but
+	## includes every other still-living enemy plus the player), so earlier
+	## enemies in the loop already occupy their new cells by the time a later
+	## one paths, the same way the player can't be pathed through either.
+	static func _start_enemy_turn( tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager) -> void:
+		battle_mgt.state = TurnState.ENEMY_TURN
+		await tree.create_timer(0.3).timeout
+
+		for e in enemies:
+			if not e.is_alive():
+				continue
+			if not player.is_alive():
+				break
+			if Utils._distance(e.grid_pos, player.grid_pos) > 1:
+				var target := _adjacent_cell_near(player.grid_pos, e.grid_pos, grid_map)
+				# `+` between a typed Array[Vector2i] and an untyped [x] literal
+				# produces an untyped result at runtime and compute_path_for()
+				# rejects it (typed-array parameter) — append() instead of
+				# concatenating keeps the static type intact.
+				var blockers := _living_enemy_cells(enemies,e)
+				blockers.append(player.grid_pos)
+				var path: Array[Vector2i] = grid_map.compute_path_for(e.grid_pos, target, blockers)
+				if path.size() - 1 > ENEMY_MOVE_RANGE:
+					path = path.slice(0, ENEMY_MOVE_RANGE + 1)
+				if path.size() > 1:
+					await e.move_along(path)
+			if Utils._distance(e.grid_pos, player.grid_pos) <= 1:
+				e.face_towards(player.grid_pos)
+				weapon_fx.play_swing(e.position, e.facing)
+				player.take_damage(max(1, e.atk - player.def))
+
+		if not player.is_alive():
+			await battle_mgt._end_battle("GAME OVER", player)
+			return
+
+		battle_mgt.state = TurnState.PLAYER_TURN
+
+class Player:
+	func a() -> void:
+		pass
