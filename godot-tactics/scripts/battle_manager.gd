@@ -30,6 +30,11 @@ const PLAYER_START := Vector2i(2, 2)
 @onready var ui_panel: UIPanel = $WindowLayer/UI_Menu
 @onready var dialogue: DialogueUI = $WindowLayer/Dialogue_UI
 
+
+# this currently points to the wrong object
+@onready var ui_message_label : Label = dialogue._announce_label#ui_panel._message_label
+# stores the enemys path in the scene tree for implementing the enemy ai logic on them
+
 ## Any number of EnemyUnit siblings under the scene root — not a single
 ## hardcoded $Enemy — discovered in _ready() rather than @onready-bound to
 ## one path. This is what lets the scene just be duplicated (Enemy2,
@@ -84,6 +89,7 @@ func _on_panel_opened() -> void:
 func _on_panel_closed() -> void:
 	grid_map.input_enabled = true
 
+# consumes the confirm pressed signal from tilemap_gd : 
 func _on_confirm_pressed(cell: Vector2i) -> void:
 	if state != TurnState.PLAYER_TURN or ui_panel.is_open:
 		return
@@ -104,7 +110,10 @@ func _on_confirm_pressed(cell: Vector2i) -> void:
 		# fits _announce_label's box on one line (measured: 7px needed vs a
 		# 17px-tall box at this font) instead of wrapping to two lines that
 		# only just fit with a few px of slack.
-		dialogue.announce("MOVED FROM %d,%d TO %d,%d" % [from.x, from.y, to.x, to.y])
+		var movement_dialogue : String = "MOVED FROM %d,%d TO %d,%d" % [from.x, from.y, to.x, to.y]
+		#dialogue.announce()
+		ui_panel.Dialogue.announce(movement_dialogue, ui_message_label, dialogue,get_tree())
+		
 	if state == TurnState.BUSY:
 		state = TurnState.PLAYER_TURN
 	# The move is the player's one action-enabling step each turn — open the
@@ -142,10 +151,10 @@ func _try_player_attack(is_magic: bool) -> void:
 	var range_limit := MAGIC_RANGE if is_magic else ATTACK_RANGE
 
 	if is_magic and player.mp < MAGIC_COST:
-		ui_panel.flash_message("NOT ENOUGH MP")
+		ui_panel.Dialogue.announce("NOT ENOUGH MP",ui_message_label, dialogue,get_tree())
 		return
 	if dist > range_limit:
-		ui_panel.flash_message("OUT OF RANGE")
+		ui_panel.Dialogue.announce("OUT OF RANGE", ui_message_label, dialogue ,get_tree())
 		return
 
 	state = TurnState.BUSY
@@ -170,9 +179,16 @@ func _try_player_attack(is_magic: bool) -> void:
 	# _announce_label: fits up to ~22 chars at this font/box size).
 	var verb := "MAGIC" if is_magic else "ATTACK"
 	if target.is_alive():
-		dialogue.announce("%s HIT FOR %d DMG" % [verb, damage])
+		var is_alive_text = "%s HIT FOR %d DMG" % [verb, damage]
+		# bugs: 
+		# (1) I am routing all game dialogue to a single dialogue class subsystem
+		ui_panel.Dialogue.announce(is_alive_text, ui_message_label, dialogue, get_tree())
+		#dialogue.announce()
 	else:
-		dialogue.announce("%s DEFEATED ENEMY" % verb)
+		var enemy_defeated_text = "%s DEFEATED ENEMY" % verb
+		#dialogue.announce("%s DEFEATED ENEMY" % verb)
+		ui_panel.Dialogue.announce(enemy_defeated_text,ui_message_label,dialogue,get_tree())
+		
 		# Flashed/hidden right here, at the moment this specific enemy dies,
 		# rather than deferred to _end_battle() — with more than one enemy,
 		# killing one mid-battle needs its own feedback whether or not it
@@ -185,6 +201,10 @@ func _try_player_attack(is_magic: bool) -> void:
 		return
 
 	_start_enemy_turn()
+
+"Enemy AI Logic"
+#1. Not adjacent to the player (_distance > 1) → find the nearest walkable cell next to the player (_adjacent_cell_near), pathfind to it (grid_map.compute_path_for), and move (capped by ENEMY_MOVE_RANGE).
+#2. Adjacent to the player (checked again after moving, in case the move closed the gap) → face the player and attack with a basic melee hit (e.atk - player.def, minimum 1).'''
 
 ## Each living enemy acts once, in array order (the order they were
 ## discovered under the scene root in _ready()) — not simultaneously, so two
@@ -302,6 +322,11 @@ func _end_battle(message: String, defeated: Unit = null) -> void:
 	state = TurnState.GAME_OVER
 	if defeated:
 		await defeated.play_defeat()
-	await dialogue.announce(message)
+	await ui_panel.Dialogue.announce(message, ui_message_label, dialogue,get_tree())
+	#await dialogue.announce(message)
+	
 	await _fade.fade_out()
+	
+	# to do:
+	# (1) implement a win and loss screen
 	get_tree().change_scene_to_packed(load("res://TItleScreen.tscn"))

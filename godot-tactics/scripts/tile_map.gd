@@ -13,6 +13,7 @@ const TILE_PATH := Vector2i(18, 0)  # last tile in 16x16_gameboy_tileset_1.png
 
 const CURSOR_REPEAT_DELAY := 0.16  # mirrors GB's INPUT_DELAY key-repeat feel
 
+#signals emitted to battle_manager.gd for consumption
 signal confirm_pressed(cell: Vector2i)
 signal cursor_moved(cell: Vector2i)
 
@@ -30,7 +31,6 @@ func _ready() -> void:
 	for x in GRID_SIZE:
 		for y in GRID_SIZE:
 			set_cell(0, Vector2i(x, y), 0, TILE_GRASS, 0)
-
 	_astar.region = Rect2i(0, 0, GRID_SIZE, GRID_SIZE)
 	_astar.cell_shape = AStarGrid2D.CELL_SHAPE_SQUARE
 	_astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -68,6 +68,7 @@ func compute_path_for(from: Vector2i, to: Vector2i, blockers: Array[Vector2i]) -
 			_astar.set_point_solid(b, false)
 	return path
 
+#display the highlighted path as the player walks on it
 func show_path(path: Array[Vector2i]) -> void:
 	path_cells = path
 	_redraw_overlay()
@@ -76,6 +77,14 @@ func clear_path() -> void:
 	path_cells = []
 	_redraw_overlay()
 
+
+"""
+Functions:
+	(1) bails early if input_enabled is false
+	(2) converts mouse position to a grid cell
+	(3) moves the cursor to the grid tile and emits confirmed_pressed
+	(4) emits confirm_pressed for keyboard ui_select input
+"""
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled:
 		return
@@ -94,6 +103,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_accept"):
 		confirm_pressed.emit(cursor_cell)
 
+# Loop driven event for cursor movements with keypads & joysticks
 func _process(delta: float) -> void:
 	if not input_enabled:
 		_repeat_timer = 0.0
@@ -128,10 +138,12 @@ func _process(delta: float) -> void:
 		_repeat_timer = 0.0
 		_try_move_cursor(dir)
 
+# moves the cursor on the tilemap
 func _try_move_cursor(dir: Vector2i) -> void:
 	var target := cursor_cell + dir
 	if is_within_grid(target):
 		_set_cursor(target)
+
 
 func _set_cursor(cell: Vector2i) -> void:
 	if cell == cursor_cell:
@@ -140,6 +152,10 @@ func _set_cursor(cell: Vector2i) -> void:
 	cursor_moved.emit(cursor_cell)
 	_redraw_overlay()
 
+
+"""
+it redraws both the cursor tile and the movement-path highlight tiles on the same overlay layer, in one pass (clear everything, then restamp path + cursor). It's not cursor-only; it's "whatever should currently be highlighted on layer 1."
+"""
 func _redraw_overlay() -> void:
 	for x in GRID_SIZE:
 		for y in GRID_SIZE:

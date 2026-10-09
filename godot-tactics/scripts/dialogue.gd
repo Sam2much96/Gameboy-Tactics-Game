@@ -77,15 +77,15 @@ func _compute_shown_position() -> Vector2:
 ## message log. The original call's own delayed hide checks the text is
 ## still its own before closing, so it can't cut off a newer message that
 ## overwrote it.
-func announce(text: String) -> void:
-	_announce_label.text = text
-	if not is_open:
-		await _slide_in()
-	await get_tree().create_timer(ANNOUNCE_TIME).timeout
-	if _manual_open:
-		return
-	if is_instance_valid(_announce_label) and _announce_label.text == text:
-		await _slide_out()
+#func announce(text: String) -> void:
+#	_announce_label.text = text
+#	if not is_open:
+#		await _slide_in()
+#	await get_tree().create_timer(ANNOUNCE_TIME).timeout
+#	if _manual_open:
+#		return
+#	if is_instance_valid(_announce_label) and _announce_label.text == text:
+#		await _slide_out()
 
 func _input(event: InputEvent) -> void:
 	if _sliding:

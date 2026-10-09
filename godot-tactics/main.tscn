@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://c5gvpceiyhxb8"]
 
 [ext_resource type="Texture2D" uid="uid://cmsnniere3il6" path="res://character/16x16_gameboy_tileset_1.png" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://cetvlu5u4ot0f" path="res://tile_map.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://cetvlu5u4ot0f" path="res://scripts/tile_map.gd" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://ch67afetg7yyl" path="res://character/16x16_gameboy_animation.png" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://csm8hry834d6w" path="res://Music.tscn" id="4_1bvp3"]
-[ext_resource type="Script" uid="uid://mw7vdd6oan7f" path="res://player_unit.gd" id="5_punit"]
+[ext_resource type="Script" uid="uid://mw7vdd6oan7f" path="res://scripts/player_unit.gd" id="5_punit"]
 [ext_resource type="Script" uid="uid://tanh82tdbbaw" path="res://scripts/enemy_unit.gd" id="6_eunit"]
 [ext_resource type="Texture2D" uid="uid://b8cqdkcbrphac" path="res://weapons/weapons.png" id="6_ycdy4"]
 [ext_resource type="Texture2D" uid="uid://cn14vfths8jym" path="res://character/Enemy1.png" id="7_enemy"]
 [ext_resource type="Texture2D" uid="uid://catsw766c8av0" path="res://weapons/treasure_chest.png" id="7_w48qg"]
-[ext_resource type="Script" uid="uid://vo6ugaeo462g" path="res://UI.gd" id="8_4c57u"]
+[ext_resource type="Script" uid="uid://vo6ugaeo462g" path="res://scripts/UI.gd" id="8_4c57u"]
 [ext_resource type="Script" uid="uid://cbm4ak8r7824m" path="res://scripts/battle_manager.gd" id="8_bmgr"]
 [ext_resource type="Theme" uid="uid://b1mvfcinrk3hc" path="res://GameboyTheme.tres" id="9_dg77c"]
 [ext_resource type="PackedScene" uid="uid://brstf0b1e8jvb" path="res://helpers/pointers.tscn" id="9_efxa6"]
@@ -208,7 +208,6 @@ hframes = 8
 script = ExtResource("12_wfx")
 
 [node name="Chest" type="Sprite2D" parent="." unique_id=1047857888]
-visible = false
 position = Vector2(35, 31)
 texture = ExtResource("7_w48qg")
 hframes = 2

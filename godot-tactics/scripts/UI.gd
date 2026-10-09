@@ -36,6 +36,8 @@ extends TileMap
 # open/close. (Verified: a focused button stays focused after this consumes
 # Tab, instead of cycling away as it would if this used _unhandled_input.)
 
+# i want to separate the game code into separate classes
+
 signal opened
 signal closed
 signal action_chosen(action: String)
@@ -88,10 +90,13 @@ var _sliding: bool = false
 @onready var _def_label: Label = $VBoxContainer2/Label3
 @onready var _mp_label: Label = $VBoxContainer2/Label4
 
-var _message_label: Label
+@export var _message_label: Label
 
 func _ready() -> void:
+	# makes sure that the menu toggle button is in the action set
+	# redundant code
 	_ensure_menu_toggle_action()
+	
 	_match_camera_zoom()
 	_build_message_label()
 
@@ -121,11 +126,6 @@ func update_stats(player: Unit) -> void:
 	_def_label.text = "DEF %d" % player.def
 	_mp_label.text = "MP  %d/%d" % [player.mp, player.max_mp]
 
-func flash_message(text: String) -> void:
-	_message_label.text = text
-	await get_tree().create_timer(1.0).timeout
-	if is_instance_valid(_message_label):
-		_message_label.text = ""
 
 ## External callers (battle_manager.gd) close the panel explicitly after a
 ## successful action rather than this closing itself unconditionally on
@@ -146,7 +146,9 @@ func _on_option_pressed(index: int) -> void:
 	if _sliding:
 		return
 	var button := _buttons[index]
-	_dialogue.announce(button.text)
+	# note: this function was moved to dialogue class
+	
+	Dialogue.announce(button.text, _dialogue._announce_label, _dialogue,get_tree())
 	_flash_button(button)
 	action_chosen.emit(ACTIONS[index])
 
@@ -218,3 +220,49 @@ func _ensure_menu_toggle_action() -> void:
 	var key_event := InputEventKey.new()
 	key_event.physical_keycode = KEY_TAB
 	InputMap.action_add_event("menu_toggle", key_event)
+
+# to do:
+# (1) separate the ui class into dialogue class with static function pointers
+class Dialogue:
+	# bugs :
+	# (1) the game's button select routes through another UI class
+	
+	func a() -> void:
+		pass
+	
+	static func flash_message(text: String, _message_label : Label, tree: SceneTree) -> void:
+		# bug 1: route all flash_message calls to announce
+		print_debug("message debug: " + text)
+		print_stack()
+		_message_label.text = text
+		await tree.create_timer(1.0).timeout
+		if is_instance_valid(_message_label):
+			_message_label.text = ""
+		#pass
+	
+	
+	## Short-lived status line (e.g. "MAX RANGE REACHED"): slides the panel up
+	## from the bottom, holds for ANNOUNCE_TIME, then slides it away again —
+	## unless dialogue_toggle has manually pinned it open, in which case the
+	## auto-hide is skipped and it's left for the player to close themselves.
+	## Not queued — a new announce() call while one is already showing just
+	## replaces the text and keeps the panel open rather than waiting its turn,
+	## since these are meant to be quick, low-stakes status blips, not a
+	## message log. The original call's own delayed hide checks the text is
+	## still its own before closing, so it can't cut off a newer message that
+	## overwrote it.
+	static func announce(text: String, _announce_label : Label, diagUI : DialogueUI, tree : SceneTree) -> void:
+		_announce_label.text = text
+		if not diagUI.is_open:
+			await diagUI._slide_in()
+		await tree.create_timer(diagUI.ANNOUNCE_TIME).timeout
+		if diagUI._manual_open:
+			return
+		if is_instance_valid(_announce_label) and _announce_label.text == text:
+			await diagUI._slide_out()
+
+	
+
+class UIAnimation:
+	func a() -> void:
+		pass
