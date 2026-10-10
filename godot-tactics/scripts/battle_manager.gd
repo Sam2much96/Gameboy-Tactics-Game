@@ -63,10 +63,11 @@ func _ready() -> void:
 	var occupied: Array[Vector2i] = [player.grid_pos]
 	for e in enemies:
 		if not grid_map.is_within_grid(e.grid_pos) or e.grid_pos in occupied:
-			e.grid_pos = _find_free_cell(e.grid_pos, occupied)
+			e.grid_pos = Enemy._find_free_cell(e.grid_pos, occupied, grid_map)
 			e.position = e.grid_to_world(e.grid_pos)
 		occupied.append(e.grid_pos)
-
+	
+	#creates a gameboy style scene transition
 	_fade = FadeOverlay.new()
 	add_child(_fade)
 	_fade.snap_opaque()
@@ -127,106 +128,20 @@ func _on_action_chosen(action: String) -> void:
 		return
 	match action:
 		"attack":
-			_try_player_attack(false)
+			#is_magic: bool, battle_manager : BattleManager, enemies : Array[EnemyUnit], 
+			#player : PlayerUnit, ui_panel : UIPanel, ui_message_label : Label, dialogue : DialogueUI, 
+			#weapon_fx: WeaponFx, tree : SceneTree, grid_map : TacticsGrid
+			
+			# note: this function is too complex,split it into smaller functions
+			Player._try_player_attack(false,self,enemies,player,ui_panel,ui_message_label,dialogue,weapon_fx,get_tree(), grid_map)
 		"magic":
-			_try_player_attack(true)
+			Player._try_player_attack(true,self,enemies,player,ui_panel,ui_message_label,dialogue,weapon_fx,get_tree(),grid_map)
 		"end":
 			ui_panel.close()
 			#state : int, tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager
 			Enemy._start_enemy_turn(get_tree(),enemies, player,grid_map, weapon_fx,self)
 
-# to do:
-# (1) move to a player class
 
-## Closes the panel only once the action actually succeeds — a failed
-## attempt (out of range, not enough MP) leaves it open so the player can
-## pick something else, matching how battle_menu.gd originally behaved.
-##
-## With multiple enemies, there's no target-picker UI (out of scope here —
-## this is about the turn/combat logic surviving more than one enemy, not a
-## new targeting feature), so ATTACK/MAGIC auto-target the nearest living
-## enemy, same as most SRPGs default to when a target isn't chosen by hand.
-func _try_player_attack(is_magic: bool) -> void:
-	var target := Enemy._nearest_enemy(player.grid_pos, enemies)
-	if target == null:
-		return
-
-	var dist := Utils._distance(player.grid_pos, target.grid_pos)
-	var range_limit := MAGIC_RANGE if is_magic else ATTACK_RANGE
-
-	if is_magic and player.mp < MAGIC_COST:
-		ui_panel.Dialogue.announce("NOT ENOUGH MP",ui_message_label, dialogue,get_tree())
-		return
-	if dist > range_limit:
-		ui_panel.Dialogue.announce("OUT OF RANGE", ui_message_label, dialogue ,get_tree())
-		return
-
-	state = TurnState.BUSY
-	player.face_towards(target.grid_pos)
-	# weapons.png is a sword — only the physical ATTACK gets the swing effect;
-	# MAGIC has no matching art yet, so it keeps just the existing
-	# state-hold from play_attack() below rather than showing a sword for a
-	# spell.
-	if not is_magic:
-		weapon_fx.play_swing(player.position, player.facing)
-	var damage: int = MAGIC_DAMAGE if is_magic else max(1, player.atk - target.def)
-	if is_magic:
-		player.mp -= MAGIC_COST
-	target.take_damage(damage)
-
-	await player.play_attack()
-	ui_panel.update_stats(player)
-	ui_panel.close()
-
-	# Reports the effect of the action that was just taken, mirroring the
-	# move announcement above — same one-line budget (measured against
-	# _announce_label: fits up to ~22 chars at this font/box size).
-	var verb := "MAGIC" if is_magic else "ATTACK"
-	if target.is_alive():
-		var is_alive_text = "%s HIT FOR %d DMG" % [verb, damage]
-		# bugs: 
-		# (1) I am routing all game dialogue to a single dialogue class subsystem
-		ui_panel.Dialogue.announce(is_alive_text, ui_message_label, dialogue, get_tree())
-		#dialogue.announce()
-	else:
-		var enemy_defeated_text = "%s DEFEATED ENEMY" % verb
-		#dialogue.announce("%s DEFEATED ENEMY" % verb)
-		ui_panel.Dialogue.announce(enemy_defeated_text,ui_message_label,dialogue,get_tree())
-		
-		# Flashed/hidden right here, at the moment this specific enemy dies,
-		# rather than deferred to _end_battle() — with more than one enemy,
-		# killing one mid-battle needs its own feedback whether or not it
-		# was the last one standing (_end_battle only fires once ALL of them
-		# are dead).
-		await target.play_defeat()
-
-	if Enemy._all_enemies_defeated(enemies):
-		await _end_battle("GAME WON")
-		return
-	#state : int, tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager
-	Enemy._start_enemy_turn( get_tree(), enemies,player,grid_map,weapon_fx,self)
-
-
-
-
-
-## Square-ring search outward from `near` for the closest cell not already
-## in `occupied` — only ever needed once, in _ready(), to un-stack a freshly
-## duplicated enemy that still shares its original's exact grid_pos. Falls
-## back to `near` itself if the grid is somehow completely full (never
-## happens on a 10x10 board with a handful of units).
-func _find_free_cell(near: Vector2i, occupied: Array[Vector2i]) -> Vector2i:
-	if grid_map.is_within_grid(near) and near not in occupied:
-		return near
-	for radius in range(1, grid_map.GRID_SIZE * 2):
-		for dx in range(-radius, radius + 1):
-			for dy in range(-radius, radius + 1):
-				if max(abs(dx), abs(dy)) != radius:
-					continue
-				var c := near + Vector2i(dx, dy)
-				if grid_map.is_within_grid(c) and c not in occupied:
-					return c
-	return near
 
 ## defeated is whichever side just hit 0 HP — null for the WON case, since
 ## with multiple enemies each one already gets flashed/hidden individually
@@ -355,7 +270,108 @@ class Enemy:
 			return
 
 		battle_mgt.state = TurnState.PLAYER_TURN
+	
+	
+	# This function is used by the enemy script just once
+	#Only enemies, and only once, when the battle starts. It isn't part of the enemy AI.
+	#It's called in one place, battle_manager.gd:66, inside _ready(). When the battle loads, the battle manager checks each enemy's starting square. If an enemy is off the board or on the same square as the player or another enemy, _find_free_cell() moves it to the nearest empty square.
+
+	## Square-ring search outward from `near` for the closest cell not already
+	## in `occupied` — only ever needed once, in _ready(), to un-stack a freshly
+	## duplicated enemy that still shares its original's exact grid_pos. Falls
+	## back to `near` itself if the grid is somehow completely full (never
+	## happens on a 10x10 board with a handful of units).
+	static func _find_free_cell(near: Vector2i, occupied: Array[Vector2i], grid_map : TacticsGrid) -> Vector2i:
+		if grid_map.is_within_grid(near) and near not in occupied:
+			return near
+		for radius in range(1, grid_map.GRID_SIZE * 2):
+			for dx in range(-radius, radius + 1):
+				for dy in range(-radius, radius + 1):
+					if max(abs(dx), abs(dy)) != radius:
+						continue
+					var c := near + Vector2i(dx, dy)
+					if grid_map.is_within_grid(c) and c not in occupied:
+						return c
+		return near
+
+
+
 
 class Player:
 	func a() -> void:
 		pass
+	
+
+	## Closes the panel only once the action actually succeeds — a failed
+	## attempt (out of range, not enough MP) leaves it open so the player can
+	## pick something else, matching how battle_menu.gd originally behaved.
+	##
+	## With multiple enemies, there's no target-picker UI (out of scope here —
+	## this is about the turn/combat logic surviving more than one enemy, not a
+	## new targeting feature), so ATTACK/MAGIC auto-target the nearest living
+	## enemy, same as most SRPGs default to when a target isn't chosen by hand.
+	static func _try_player_attack(
+		is_magic: bool, battle_manager : BattleManager, enemies : Array[EnemyUnit], 
+		player : PlayerUnit, ui_panel : UIPanel, ui_message_label : Label, dialogue : DialogueUI, 
+		weapon_fx: WeaponFx, tree : SceneTree, grid_map : TacticsGrid) -> void:
+		
+		var target := Enemy._nearest_enemy(player.grid_pos, enemies)
+		if target == null:
+			return
+
+		var dist := Utils._distance(player.grid_pos, target.grid_pos)
+		var range_limit := MAGIC_RANGE if is_magic else ATTACK_RANGE
+
+		if is_magic and player.mp < MAGIC_COST:
+			
+			#text: String, _announce_label : Label, diagUI : DialogueUI, tree : SceneTree
+			ui_panel.Dialogue.announce("NOT ENOUGH MP",ui_message_label, dialogue,tree)
+			return
+		if dist > range_limit:
+			ui_panel.Dialogue.announce("OUT OF RANGE", ui_message_label, dialogue ,tree)
+			return
+
+		battle_manager.state = TurnState.BUSY
+		player.face_towards(target.grid_pos)
+		# weapons.png is a sword — only the physical ATTACK gets the swing effect;
+		# MAGIC has no matching art yet, so it keeps just the existing
+		# state-hold from play_attack() below rather than showing a sword for a
+		# spell.
+		if not is_magic:
+			weapon_fx.play_swing(player.position, player.facing)
+		var damage: int = MAGIC_DAMAGE if is_magic else max(1, player.atk - target.def)
+		if is_magic:
+			player.mp -= MAGIC_COST
+		target.take_damage(damage)
+
+		await player.play_attack()
+		ui_panel.update_stats(player)
+		ui_panel.close()
+
+		# Reports the effect of the action that was just taken, mirroring the
+		# move announcement above — same one-line budget (measured against
+		# _announce_label: fits up to ~22 chars at this font/box size).
+		var verb := "MAGIC" if is_magic else "ATTACK"
+		if target.is_alive():
+			var is_alive_text = "%s HIT FOR %d DMG" % [verb, damage]
+			# bugs: 
+			# (1) I am routing all game dialogue to a single dialogue class subsystem
+			ui_panel.Dialogue.announce(is_alive_text, ui_message_label, dialogue, tree)
+			#dialogue.announce()
+		else:
+			var enemy_defeated_text = "%s DEFEATED ENEMY" % verb
+			#dialogue.announce("%s DEFEATED ENEMY" % verb)
+			ui_panel.Dialogue.announce(enemy_defeated_text,ui_message_label,dialogue,tree)
+			
+			# Flashed/hidden right here, at the moment this specific enemy dies,
+			# rather than deferred to _end_battle() — with more than one enemy,
+			# killing one mid-battle needs its own feedback whether or not it
+			# was the last one standing (_end_battle only fires once ALL of them
+			# are dead).
+			await target.play_defeat()
+
+		if Enemy._all_enemies_defeated(enemies):
+			await battle_manager._end_battle("GAME WON")
+			return
+		#state : int, tree: SceneTree, enemies : Array [EnemyUnit], player: PlayerUnit, grid_map: TacticsGrid, weapon_fx: WeaponFx, battle_mgt : BattleManager
+		Enemy._start_enemy_turn( tree, enemies,player,grid_map,weapon_fx,battle_manager)
