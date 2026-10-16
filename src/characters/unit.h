@@ -36,7 +36,7 @@ typedef struct {
 /* The player's direction × state animation machine (player_anim.c). */
 extern PlayerAnim player_anim;
 
-/* Load Player[] and Enemy1[] into sprite VRAM. */
+/* Load Player[] and Enemy[] into sprite VRAM. */
 void unit_load_tiles(void);
 
 /* Stats are copied from s; hp/mp start full.  Snaps the sprite to (gx,gy). */

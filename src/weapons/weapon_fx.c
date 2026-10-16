@@ -4,7 +4,7 @@
 #include "../UI/ui_text.h"   /* WEAPON_TILE_BASE, WEAPON_OAM_BASE */
 
 #include "weapons.h"
-#include "weapons.c"         /* Weapons[] tile data */
+#include "weapons.c"         /* Sword[] tile data */
 
 #define SWING_FRAMES  3u
 #define FRAME_TIME    8u     /* VBLs per frame — Godot's FRAME_TIME 0.14s */
@@ -39,7 +39,7 @@ static void show_frame(uint8_t frame)
 void weapon_fx_init(void)
 {
     uint8_t i;
-    set_sprite_data(WEAPON_TILE_BASE, 32u, Weapons);
+    set_sprite_data(WEAPON_TILE_BASE, 32u, Sword);
     for (i = 0u; i < 4u; i++) set_sprite_prop(WEAPON_OAM_BASE + i, 0u);
     fx_step = 0u;
     weapon_fx_hide();

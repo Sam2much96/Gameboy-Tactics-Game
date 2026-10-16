@@ -9,7 +9,7 @@
    (OAM WEAPON_OAM_BASE..+3) that battle.c plays at whichever unit is
    attacking, for both sides' physical attacks.
 
-   Weapons[] holds 8 frames rotating the blade clockwise in 45° steps:
+   Sword[] (weapons.c) holds 8 frames rotating the blade clockwise in 45° steps:
      0 = up, 1 = up-right, 2 = right, 3 = down-right,
      4 = down, 5 = down-left, 6 = left, 7 = up-left
    A swing is the 3 frames centred on the attacker's facing, drawn half a

@@ -26,9 +26,9 @@
 #define __Enemy1_h_INCLUDE
 
 /* Bank of tiles. */
-#define Enemy1Bank 0
+#define EnemyBank 0
 /* Start of tile array. */
-extern const unsigned char Enemy1[];
+extern const unsigned char Enemy[];
 
 #endif
 

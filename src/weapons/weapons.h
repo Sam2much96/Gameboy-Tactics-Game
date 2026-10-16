@@ -26,9 +26,9 @@
 #define __weapons_h_INCLUDE
 
 /* Bank of tiles. */
-#define WeaponsBank 0
+#define SwordBank 0
 /* Start of tile array. */
-extern const unsigned char Weapons[];
+extern const unsigned char Sword[];
 
 #endif
 

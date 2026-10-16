@@ -6,13 +6,13 @@
 
 #include "player.c"            /* Player[] tile data */
 #include "Enemy1.h"
-#include "Enemy1.c"            /* Enemy1[] tile data */
+#include "Enemy1.c"            /* Enemy[] tile data */
 
 #define SPRITE_SIZE 8u
 
 PlayerAnim player_anim;
 
-/* Enemy1[] frame order is down, left, UP, right — not the player's
+/* Enemy[] frame order is down, left, UP, right — not the player's
    down/left/right/up — so map PlayerDir → GBTD frame explicitly.
    (godot-tactics' enemy_unit.gd uses `frame = facing` and so shows the
    back view when facing right; worth fixing there too.) */
@@ -26,7 +26,7 @@ static const uint8_t ENEMY_DIR_FRAME[4] = {
 void unit_load_tiles(void)
 {
     set_sprite_data(PLAYER_TILE_BASE, 16u, Player);
-    set_sprite_data(ENEMY_TILE_BASE,  16u, Enemy1);
+    set_sprite_data(ENEMY_TILE_BASE,  16u, Enemy);
 }
 
 static void apply_frame(Unit *u)

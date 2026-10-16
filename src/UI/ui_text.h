@@ -13,7 +13,7 @@
    tiles 76- 91:  Player[]               (16 tiles: 4 frames × 4 sub-tiles)
    tiles 92- 94:  Selector[]             ( 3 tiles: cursor, path-highlight, blank)
    tiles 95-102:  PointerSprites[]       ( 8 tiles: 2 frames × 4 sub-tiles)
-   tiles103-118:  Enemy1[]               (16 tiles: 4 frames × 4 sub-tiles)
+   tiles103-118:  Enemy[]                (16 tiles: 4 frames × 4 sub-tiles)
    tiles119-150:  Weapons[]              (32 tiles: 8 frames × 4 sub-tiles)
    tile     151:  grid cursor corner     ( 1 tile, flipped ×4 into a 16×16 box)
    tiles152-153:  extra glyphs '/' ','   ( 2 tiles, font_min has no punctuation)
