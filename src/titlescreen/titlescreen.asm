@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ISO C Compiler
-; Version 4.5.1 #15267 (Linux)
+; Version 4.5.1 #15267 (Mac OS X ppc)
 ;--------------------------------------------------------
 	.module titlescreen
 	
@@ -23,6 +23,7 @@
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
+	.area _HRAM
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -100,7 +101,7 @@ _place_text:
 	add	a, e
 	ld	b, a
 	ld	d, b
-;/opt/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+;/Users/apple/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
 	ld	l, d
 	xor	a, a
 	ld	h, a
@@ -113,7 +114,7 @@ _place_text:
 	inc	hl
 	pop	de
 	ld	(hl), c
-;/opt/gbdk/include/gb/gb.h:1946: shadow_OAM[nb].prop=prop;
+;/Users/apple/gbdk/include/gb/gb.h:1946: shadow_OAM[nb].prop=prop;
 	ld	l, b
 	ld	h, #0x00
 	add	hl, hl
@@ -133,12 +134,12 @@ _place_text:
 	ldhl	sp,	#0
 	add	a, (hl)
 	ld	d, a
-;/opt/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+;/Users/apple/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	hl, #_shadow_OAM
 	add	hl, bc
 	ld	c, l
 	ld	b, h
-;/opt/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+;/Users/apple/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
 	ldhl	sp,	#1
 	ld	a, (hl)
 	ld	(bc), a
@@ -4865,7 +4866,7 @@ _run_titlescreen::
 	ldhl	sp,	#4
 	ld	(hl), #0x04
 00121$:
-;/opt/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+;/Users/apple/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	bc, #_shadow_OAM+0
 	ldhl	sp,	#4
 	ld	e, (hl)
@@ -4875,7 +4876,7 @@ _run_titlescreen::
 	add	hl, hl
 	add	hl, hl
 	add	hl, bc
-;/opt/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+;/Users/apple/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a

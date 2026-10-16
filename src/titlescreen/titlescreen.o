@@ -1,5 +1,5 @@
 XL4
-H 9 areas 12 global symbols
+H A areas 12 global symbols
 M titlescreen
 S _pointer_anim_select Ref00000000
 S _pointer_hide Ref00000000
@@ -20,6 +20,7 @@ A _CODE size 1366 flags 0 addr 0
 S _titlescreen_map Def00000FA0
 S _run_titlescreen Def000011DA
 S _titlescreen_data Def00000070
+A _HRAM size 0 flags 0 addr 0
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 0 flags 0 addr 0
 A _DABS size 0 flags 8 addr 0

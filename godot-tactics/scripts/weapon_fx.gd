@@ -17,6 +17,9 @@ extends Sprite2D
 # PlayerUnit.Dir and EnemyUnit.Dir, so either unit's `facing` can be passed
 # straight through as `direction` without translation.
 
+# bugs:
+# (1) the sword swing animation is improperly implemented
+
 enum Dir { DOWN, LEFT, RIGHT, UP }
 
 const ATTACK_FRAMES := {

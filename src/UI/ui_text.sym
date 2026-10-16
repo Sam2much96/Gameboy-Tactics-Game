@@ -11,20 +11,26 @@ Symbol Table
   3 _UI_Tiles                                                       00000000 GR
     __divuchar                                                      ******** GX
     __moduchar                                                      ******** GX
-  8 __xinit__Selector                                               00000080 R
-  8 __xinit__UI_Tiles                                               00000000 R
-  0 _char_to_tile                                                   00000000 R
+  9 __xinit__Selector                                               00000080 R
+  9 __xinit__UI_Tiles                                               00000000 R
+  8 _char_to_tile                                                   00000000 R
+    _set_bkg_data                                                   ******** GX
     _set_win_tiles                                                  ******** GX
-  0 _ui_print                                                       00000068 GR
-  0 _ui_print_uint8                                                 0000009F GR
-
+  8 _ui_clear                                                       00000187 GR
+  8 _ui_glyphs                                                      00000076 R
+  8 _ui_load_glyphs                                                 00000096 GR
+  8 _ui_print                                                       000000A4 GR
+  8 _ui_print_uint8                                                 000000DB GR
+  8 _ui_print_wrapped                                               000001C6 GR
+  8 _ui_str_cat                                                     000002D7 GR
+  8 _ui_str_u8                                                      000002E5 GR
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      14B   flags    0
+   0 _CODE                                      size        0   flags    0
    1 _HRAM                                      size        0   flags    0
    2 _DATA                                      size        0   flags    0
    3 _INITIALIZED                               size       B0   flags    0
@@ -32,6 +38,7 @@ Area Table
    5 _HOME                                      size        0   flags    0
    6 _GSINIT                                    size        0   flags    0
    7 _GSFINAL                                   size        0   flags    0
-   8 _INITIALIZER                               size       B0   flags    0
-   9 _CABS                                      size        0   flags    8
+   8 _CODE_1                                    size      327   flags    0
+   9 _INITIALIZER                               size       B0   flags    0
+   A _CABS                                      size        0   flags    8
 
