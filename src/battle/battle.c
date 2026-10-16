@@ -44,7 +44,8 @@ typedef enum { PLAYER_TURN, BUSY, ENEMY_TURN, GAME_OVER } TurnState;
 /* One row per enemy: starting cell, stats, sprite art.  Mirrors
    main.tscn's Enemy and Enemy2, which both sit on (7,7); the second gets
    un-stacked by find_free_cell() just as Godot does for a freshly
-   duplicated node.  On the GB, that second slot is the boss_1 character.
+   duplicated node.  On the GB, that second slot is the boss_1 character
+   (same stats as the regular enemy, different art).
    Add a row to add an enemy (4 OAM slots each from ENEMY_OAM_BASE; the GB
    shows at most 10 sprites per scanline, i.e. 5 units side by side,
    cursor and sword included). */
@@ -56,7 +57,7 @@ typedef struct {
 
 static const EnemySpawn ENEMY_SPAWNS[] = {
     { { 7u, 7u }, &ENEMY_STATS, ENEMY_TILE_BASE },
-    { { 7u, 7u }, &BOSS_STATS,  BOSS_TILE_BASE  },
+    { { 7u, 7u }, &ENEMY_STATS, BOSS_TILE_BASE  },
 };
 #define ENEMY_COUNT ((uint8_t)(sizeof(ENEMY_SPAWNS) / sizeof(ENEMY_SPAWNS[0])))
 

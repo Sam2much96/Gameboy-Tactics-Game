@@ -17,6 +17,5 @@ typedef struct {
 
 extern const UnitStats PLAYER_STATS;
 extern const UnitStats ENEMY_STATS;
-extern const UnitStats BOSS_STATS;
 
 #endif /* UNIT_STATS_H */

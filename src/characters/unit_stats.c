@@ -19,12 +19,3 @@ const UnitStats ENEMY_STATS = {
     1u,   /* def    */
     0u,   /* max_mp */
 };
-
-/* boss_1 — GB only, no Godot counterpart yet.  A sturdier enemy: takes
-   3 player ATTACKs instead of 2 and hits for 3 instead of 2. */
-const UnitStats BOSS_STATS = {
-    14u,  /* max_hp */
-    5u,   /* atk    */
-    2u,   /* def    */
-    0u,   /* max_mp */
-};
