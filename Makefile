@@ -60,7 +60,8 @@ src/characters/unit.o: src/characters/unit.c src/characters/unit.h \
                        src/characters/player_character.c \
                        src/characters/player_anim.h src/characters/unit_stats.h \
                        src/characters/player.c src/characters/Enemy1.c \
-                       src/characters/Enemy1.h src/grid/grid.h src/UI/ui_text.h
+                       src/characters/Enemy1.h src/characters/boss_1.c \
+                       src/characters/boss_1.h src/grid/grid.h src/UI/ui_text.h
 src/characters/unit_stats.o: src/characters/unit_stats.c src/characters/unit_stats.h
 src/characters/player_anim.o: src/characters/player_anim.c \
                               src/characters/player_anim.h src/UI/ui_text.h

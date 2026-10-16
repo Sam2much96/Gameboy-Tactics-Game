@@ -31,17 +31,22 @@ typedef struct {
     uint8_t   mp, max_mp;
     PlayerDir facing;
     uint8_t   visible;          /* 0 once play_defeat() has hidden it     */
+    uint8_t   tile_base;        /* sprite VRAM of its 4 facing frames
+                                   (enemies; the player uses player_anim) */
 } Unit;
 
 /* The player's direction × state animation machine (player_anim.c). */
 extern PlayerAnim player_anim;
 
-/* Load Player[] and Enemy[] into sprite VRAM. */
+/* Load Player[], Enemy[] and Boss_1[] into sprite VRAM. */
 void unit_load_tiles(void);
 
-/* Stats are copied from s; hp/mp start full.  Snaps the sprite to (gx,gy). */
+/* Stats are copied from s; hp/mp start full.  Snaps the sprite to (gx,gy).
+   tile_base picks an enemy's art (ENEMY_TILE_BASE, BOSS_TILE_BASE); any
+   GBTD sheet with frames in down/left/up/right order works.  Ignored for
+   the player. */
 void unit_init(Unit *u, Faction faction, const UnitStats *s,
-               uint8_t oam_base, uint8_t gx, uint8_t gy);
+               uint8_t tile_base, uint8_t oam_base, uint8_t gx, uint8_t gy);
 
 /* Put the sprite at a raw OAM position (used mid-step while walking). */
 void unit_move_pixels(Unit *u, uint8_t oam_x, uint8_t oam_y);

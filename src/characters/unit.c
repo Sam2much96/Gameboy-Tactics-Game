@@ -2,18 +2,20 @@
 
 #include "unit.h"
 #include "../grid/grid.h"      /* CELL_OAM_X/Y */
-#include "../UI/ui_text.h"     /* PLAYER_TILE_BASE, ENEMY_TILE_BASE */
+#include "../UI/ui_text.h"     /* PLAYER/ENEMY/BOSS_TILE_BASE */
 
 #include "player.c"            /* Player[] tile data */
 #include "Enemy1.h"
 #include "Enemy1.c"            /* Enemy[] tile data */
+#include "boss_1.h"
+#include "boss_1.c"            /* Boss_1[] tile data */
 
 #define SPRITE_SIZE 8u
 
 PlayerAnim player_anim;
 
-/* Enemy[] frame order is down, left, UP, right — not the player's
-   down/left/right/up — so map PlayerDir → GBTD frame explicitly.
+/* Enemy[] and Boss_1[] frame order is down, left, UP, right — not the
+   player's down/left/right/up — so map PlayerDir → GBTD frame explicitly.
    (godot-tactics' enemy_unit.gd uses `frame = facing` and so shows the
    back view when facing right; worth fixing there too.) */
 static const uint8_t ENEMY_DIR_FRAME[4] = {
@@ -27,6 +29,7 @@ void unit_load_tiles(void)
 {
     set_sprite_data(PLAYER_TILE_BASE, 16u, Player);
     set_sprite_data(ENEMY_TILE_BASE,  16u, Enemy);
+    set_sprite_data(BOSS_TILE_BASE,   16u, Boss_1);
 }
 
 static void apply_frame(Unit *u)
@@ -35,7 +38,7 @@ static void apply_frame(Unit *u)
         player_anim_set_dir(&player_anim, u->facing);
         player_anim_apply(&player_anim);
     } else {
-        uint8_t base = ENEMY_TILE_BASE + ENEMY_DIR_FRAME[u->facing] * 4u;
+        uint8_t base = u->tile_base + ENEMY_DIR_FRAME[u->facing] * 4u;
         /* GBTD column-major sub-tile order: +0=TL, +1=BL, +2=TR, +3=BR.
            OAM slot layout: 0=TL, 1=TR, 2=BL, 3=BR → cross-wire +1↔+2. */
         set_sprite_tile(u->spr.spriteids[0], base + 0u);
@@ -46,10 +49,11 @@ static void apply_frame(Unit *u)
 }
 
 void unit_init(Unit *u, Faction faction, const UnitStats *s,
-               uint8_t oam_base, uint8_t gx, uint8_t gy)
+               uint8_t tile_base, uint8_t oam_base, uint8_t gx, uint8_t gy)
 {
     uint8_t i;
-    u->faction = faction;
+    u->faction   = faction;
+    u->tile_base = tile_base;
     u->max_hp  = s->max_hp;
     u->atk     = s->atk;
     u->def     = s->def;

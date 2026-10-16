@@ -41,14 +41,22 @@ typedef enum { PLAYER_TURN, BUSY, ENEMY_TURN, GAME_OVER } TurnState;
 #define DEFEAT_FLASH_COUNT  5u
 #define DEFEAT_FLASH_TIME   5u   // VBLs per on/off half-flash (0.08 s)
 
-/* One starting cell per enemy — mirrors main.tscn's Enemy and Enemy2, which
-   both sit on (7,7); the second gets un-stacked by find_free_cell() just
-   as Godot does for a freshly duplicated node.  Add a row to add an enemy
-   (4 OAM slots each from ENEMY_OAM_BASE; the GB shows at most 10 sprites
-   per scanline, i.e. 5 units side by side, cursor and sword included). */
-static const AStarPos ENEMY_SPAWNS[] = {
-    { 7u, 7u },
-    { 7u, 7u },
+/* One row per enemy: starting cell, stats, sprite art.  Mirrors
+   main.tscn's Enemy and Enemy2, which both sit on (7,7); the second gets
+   un-stacked by find_free_cell() just as Godot does for a freshly
+   duplicated node.  On the GB, that second slot is the boss_1 character.
+   Add a row to add an enemy (4 OAM slots each from ENEMY_OAM_BASE; the GB
+   shows at most 10 sprites per scanline, i.e. 5 units side by side,
+   cursor and sword included). */
+typedef struct {
+    AStarPos         cell;
+    const UnitStats *stats;
+    uint8_t          tile_base;
+} EnemySpawn;
+
+static const EnemySpawn ENEMY_SPAWNS[] = {
+    { { 7u, 7u }, &ENEMY_STATS, ENEMY_TILE_BASE },
+    { { 7u, 7u }, &BOSS_STATS,  BOSS_TILE_BASE  },
 };
 #define ENEMY_COUNT ((uint8_t)(sizeof(ENEMY_SPAWNS) / sizeof(ENEMY_SPAWNS[0])))
 
@@ -507,14 +515,15 @@ static void load_scene(void)
 
     // Units: the player first, then each enemy — un-stacking any enemy
     // whose spawn cell is off-grid or already taken.
-    unit_init(&player, FACTION_PLAYER, &PLAYER_STATS, 0u,
+    unit_init(&player, FACTION_PLAYER, &PLAYER_STATS, PLAYER_TILE_BASE, 0u,
               PLAYER_START_X, PLAYER_START_Y);
     occupied[0].x = player.gx;
     occupied[0].y = player.gy;
     n = 1u;
     for (i = 0u; i < ENEMY_COUNT; i++) {
-        c = find_free_cell(ENEMY_SPAWNS[i], occupied, n);
-        unit_init(&enemies[i], FACTION_ENEMY, &ENEMY_STATS,
+        c = find_free_cell(ENEMY_SPAWNS[i].cell, occupied, n);
+        unit_init(&enemies[i], FACTION_ENEMY, ENEMY_SPAWNS[i].stats,
+                  ENEMY_SPAWNS[i].tile_base,
                   ENEMY_OAM_BASE + i * 4u, c.x, c.y);
         occupied[n++] = c;
     }
