@@ -1,3 +1,5 @@
+#pragma bank 1   /* battle scene code lives in ROM bank 1 — see battle/battle.h */
+
 #include "player_anim.h"
 #include "../UI/ui_text.h"   /* PLAYER_TILE_BASE */
 

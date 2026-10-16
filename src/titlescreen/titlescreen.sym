@@ -40,12 +40,13 @@ Hexadecimal [32-Bits]
 Area Table
 
    0 _CODE                                      size     1366   flags    0
-   1 _DATA                                      size        0   flags    0
-   2 _INITIALIZED                               size        0   flags    0
-   3 _DABS                                      size        0   flags    8
-   4 _HOME                                      size        0   flags    0
-   5 _GSINIT                                    size        0   flags    0
-   6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size        0   flags    0
-   8 _CABS                                      size        0   flags    8
+   1 _HRAM                                      size        0   flags    0
+   2 _DATA                                      size        0   flags    0
+   3 _INITIALIZED                               size        0   flags    0
+   4 _DABS                                      size        0   flags    8
+   5 _HOME                                      size        0   flags    0
+   6 _GSINIT                                    size        0   flags    0
+   7 _GSFINAL                                   size        0   flags    0
+   8 _INITIALIZER                               size        0   flags    0
+   9 _CABS                                      size        0   flags    8
 

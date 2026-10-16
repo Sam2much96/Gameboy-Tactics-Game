@@ -18,17 +18,17 @@
                                      18 ;--------------------------------------------------------
                                      19 	.area _DATA
     00000000                         20 _node_g:
-    00000000                         21 	.ds 240
-    000000F0                         22 _node_flags:
-    000000F0                         23 	.ds 240
-    000001E0                         24 _node_par_x:
-    000001E0                         25 	.ds 240
-    000002D0                         26 _node_par_y:
-    000002D0                         27 	.ds 240
-    000003C0                         28 _heap:
-    000003C0                         29 	.ds 675
-    00000663                         30 _heap_size:
-    00000663                         31 	.ds 1
+    00000000                         21 	.ds 144
+    00000090                         22 _node_flags:
+    00000090                         23 	.ds 144
+    00000120                         24 _node_par_x:
+    00000120                         25 	.ds 144
+    000001B0                         26 _node_par_y:
+    000001B0                         27 	.ds 144
+    00000240                         28 _heap:
+    00000240                         29 	.ds 270
+    0000034E                         30 _heap_size:
+    0000034E                         31 	.ds 1
                                      32 ;--------------------------------------------------------
                                      33 ; ram data
                                      34 ;--------------------------------------------------------
@@ -52,8 +52,8 @@
                                      52 ;--------------------------------------------------------
                                      53 ; code
                                      54 ;--------------------------------------------------------
-                                     55 	.area _CODE
-                                     56 ;src/pathfinding/astar.c:32: static void heap_push(uint8_t f, uint8_t x, uint8_t y) {
+                                     55 	.area _CODE_1
+                                     56 ;src/pathfinding/astar.c:34: static void heap_push(uint8_t f, uint8_t x, uint8_t y) {
                                      57 ;	---------------------------------
                                      58 ; Function heap_push
                                      59 ; ---------------------------------
@@ -61,13 +61,13 @@
     00000000 E8 FA            [16]   61 	add	sp, #-6
     00000002 47               [ 4]   62 	ld	b, a
     00000003 4B               [ 4]   63 	ld	c, e
-                                     64 ;src/pathfinding/astar.c:33: uint8_t i = heap_size++;
-    00000004 FAr63r06         [16]   65 	ld	a, (#_heap_size)
+                                     64 ;src/pathfinding/astar.c:35: uint8_t i = heap_size++;
+    00000004 FAr4Er03         [16]   65 	ld	a, (#_heap_size)
     00000007 F8 05            [12]   66 	ldhl	sp,	#5
     00000009 77               [ 8]   67 	ld	(hl), a
-    0000000A 21r63r06         [12]   68 	ld	hl, #_heap_size
+    0000000A 21r4Er03         [12]   68 	ld	hl, #_heap_size
     0000000D 34               [12]   69 	inc	(hl)
-                                     70 ;src/pathfinding/astar.c:34: heap[i].f = f;
+                                     70 ;src/pathfinding/astar.c:36: heap[i].f = f;
     0000000E F8 05            [12]   71 	ldhl	sp,	#5
     00000010 5E               [ 8]   72 	ld	e, (hl)
     00000011 16 00            [ 8]   73 	ld	d, #0x00
@@ -75,13 +75,13 @@
     00000014 62               [ 4]   75 	ld	h, d
     00000015 29               [ 8]   76 	add	hl, hl
     00000016 19               [ 8]   77 	add	hl, de
-    00000017 11rC0r03         [12]   78 	ld	de, #_heap
+    00000017 11r40r02         [12]   78 	ld	de, #_heap
     0000001A 19               [ 8]   79 	add	hl, de
     0000001B 70               [ 8]   80 	ld	(hl), b
-                                     81 ;src/pathfinding/astar.c:35: heap[i].x = x;
+                                     81 ;src/pathfinding/astar.c:37: heap[i].x = x;
     0000001C 5D               [ 4]   82 	ld	e, l
     0000001D 54               [ 4]   83 	ld	d, h
-                                     84 ;src/pathfinding/astar.c:36: heap[i].y = y;
+                                     84 ;src/pathfinding/astar.c:38: heap[i].y = y;
     0000001E 23               [ 8]   85 	inc	hl
     0000001F 23               [ 8]   86 	inc	hl
     00000020 13               [ 8]   87 	inc	de
@@ -92,13 +92,13 @@
     00000025 F8 08            [12]   92 	ldhl	sp,	#8
     00000027 7E               [ 8]   93 	ld	a, (hl)
     00000028 02               [ 8]   94 	ld	(bc), a
-                                     95 ;src/pathfinding/astar.c:38: while (i > 0) {
+                                     95 ;src/pathfinding/astar.c:40: while (i > 0) {
     00000029                         96 00103$:
     00000029 F8 05            [12]   97 	ldhl	sp,	#5
     0000002B 7E               [ 8]   98 	ld	a, (hl)
     0000002C B7               [ 4]   99 	or	a, a
     0000002D 28 6C            [12]  100 	jr	Z, 00106$
-                                    101 ;src/pathfinding/astar.c:39: uint8_t p = (i - 1u) >> 1;
+                                    101 ;src/pathfinding/astar.c:41: uint8_t p = (i - 1u) >> 1;
     0000002F 3A               [ 8]  102 	ld	a, (hl-)
     00000030 2B               [ 8]  103 	dec	hl
     00000031 4F               [ 4]  104 	ld	c, a
@@ -106,7 +106,7 @@
     00000034 0B               [ 8]  106 	dec	bc
     00000035 CB 38            [ 8]  107 	srl	b
     00000037 CB 19            [ 8]  108 	rr	c
-                                    109 ;src/pathfinding/astar.c:40: if (heap[p].f <= heap[i].f) break;
+                                    109 ;src/pathfinding/astar.c:42: if (heap[p].f <= heap[i].f) break;
     00000039 71               [ 8]  110 	ld	(hl),c
     0000003A 06 00            [ 8]  111 	ld	b, #0x00
     0000003C 69               [ 4]  112 	ld	l, c
@@ -114,10 +114,10 @@
     0000003E 29               [ 8]  114 	add	hl, hl
     0000003F 09               [ 8]  115 	add	hl, bc
     00000040 7D               [ 4]  116 	ld	a, l
-    00000041 C6rC0            [ 8]  117 	add	a, #<(_heap)
+    00000041 C6r40            [ 8]  117 	add	a, #<(_heap)
     00000043 4F               [ 4]  118 	ld	c, a
     00000044 7C               [ 4]  119 	ld	a, h
-    00000045 CEs03            [ 8]  120 	adc	a, #>(_heap)
+    00000045 CEs02            [ 8]  120 	adc	a, #>(_heap)
     00000047 47               [ 4]  121 	ld	b, a
     00000048 0A               [ 8]  122 	ld	a, (bc)
     00000049 F8 04            [12]  123 	ldhl	sp,	#4
@@ -129,10 +129,10 @@
     00000051 29               [ 8]  129 	add	hl, hl
     00000052 19               [ 8]  130 	add	hl, de
     00000053 7D               [ 4]  131 	ld	a, l
-    00000054 C6rC0            [ 8]  132 	add	a, #<(_heap)
+    00000054 C6r40            [ 8]  132 	add	a, #<(_heap)
     00000056 5F               [ 4]  133 	ld	e, a
     00000057 7C               [ 4]  134 	ld	a, h
-    00000058 CEs03            [ 8]  135 	adc	a, #>(_heap)
+    00000058 CEs02            [ 8]  135 	adc	a, #>(_heap)
     0000005A 57               [ 4]  136 	ld	d, a
     0000005B 1A               [ 8]  137 	ld	a, (de)
     0000005C F8 05            [12]  138 	ldhl	sp,	#5
@@ -140,7 +140,7 @@
     0000005F 3A               [ 8]  140 	ld	a, (hl-)
     00000060 96               [ 8]  141 	sub	a, (hl)
     00000061 30 38            [12]  142 	jr	NC, 00106$
-                                    143 ;src/pathfinding/astar.c:41: HeapEntry tmp = heap[p]; heap[p] = heap[i]; heap[i] = tmp;
+                                    143 ;src/pathfinding/astar.c:43: HeapEntry tmp = heap[p]; heap[p] = heap[i]; heap[i] = tmp;
     00000063 69               [ 4]  144 	ld	l, c
     00000064 60               [ 4]  145 	ld	h, b
     00000065 E5               [16]  146 	push	hl
@@ -174,32 +174,32 @@
     0000008F 4D               [ 4]  174 	ld	c, l
     00000090 44               [ 4]  175 	ld	b, h
     00000091 CDr00r00         [24]  176 	call	___memcpy
-                                    177 ;src/pathfinding/astar.c:42: i = p;
+                                    177 ;src/pathfinding/astar.c:44: i = p;
     00000094 F8 03            [12]  178 	ldhl	sp,	#3
     00000096 2A               [ 8]  179 	ld	a, (hl+)
     00000097 23               [ 8]  180 	inc	hl
     00000098 77               [ 8]  181 	ld	(hl), a
     00000099 18 8E            [12]  182 	jr	00103$
     0000009B                        183 00106$:
-                                    184 ;src/pathfinding/astar.c:44: }
+                                    184 ;src/pathfinding/astar.c:46: }
     0000009B E8 06            [16]  185 	add	sp, #6
     0000009D E1               [12]  186 	pop	hl
     0000009E 33               [ 8]  187 	inc	sp
     0000009F E9               [ 4]  188 	jp	(hl)
-                                    189 ;src/pathfinding/astar.c:47: static void heap_pop(uint8_t *ox, uint8_t *oy) {
+                                    189 ;src/pathfinding/astar.c:49: static void heap_pop(uint8_t *ox, uint8_t *oy) {
                                     190 ;	---------------------------------
                                     191 ; Function heap_pop
                                     192 ; ---------------------------------
     000000A0                        193 _heap_pop:
     000000A0 E8 F6            [16]  194 	add	sp, #-10
-                                    195 ;src/pathfinding/astar.c:48: *ox = heap[0].x;
-    000000A2 FArC1r03         [16]  196 	ld	a, (#_heap + 1)
+                                    195 ;src/pathfinding/astar.c:50: *ox = heap[0].x;
+    000000A2 FAr41r02         [16]  196 	ld	a, (#_heap + 1)
     000000A5 12               [ 8]  197 	ld	(de), a
-                                    198 ;src/pathfinding/astar.c:49: *oy = heap[0].y;
-    000000A6 FArC2r03         [16]  199 	ld	a, (#(_heap + 2) + 0)
+                                    198 ;src/pathfinding/astar.c:51: *oy = heap[0].y;
+    000000A6 FAr42r02         [16]  199 	ld	a, (#(_heap + 2) + 0)
     000000A9 02               [ 8]  200 	ld	(bc), a
-                                    201 ;src/pathfinding/astar.c:50: heap[0] = heap[--heap_size];
-    000000AA 21r63r06         [12]  202 	ld	hl, #_heap_size
+                                    201 ;src/pathfinding/astar.c:52: heap[0] = heap[--heap_size];
+    000000AA 21r4Er03         [12]  202 	ld	hl, #_heap_size
     000000AD 35               [12]  203 	dec	(hl)
     000000AE 4E               [ 8]  204 	ld	c, (hl)
     000000AF 06 00            [ 8]  205 	ld	b, #0x00
@@ -207,31 +207,31 @@
     000000B2 60               [ 4]  207 	ld	h, b
     000000B3 29               [ 8]  208 	add	hl, hl
     000000B4 09               [ 8]  209 	add	hl, bc
-    000000B5 01rC0r03         [12]  210 	ld	bc, #_heap
+    000000B5 01r40r02         [12]  210 	ld	bc, #_heap
     000000B8 09               [ 8]  211 	add	hl, bc
     000000B9 4D               [ 4]  212 	ld	c, l
     000000BA 44               [ 4]  213 	ld	b, h
     000000BB 11 03 00         [12]  214 	ld	de, #0x0003
     000000BE D5               [16]  215 	push	de
-    000000BF 11rC0r03         [12]  216 	ld	de, #_heap
+    000000BF 11r40r02         [12]  216 	ld	de, #_heap
     000000C2 CDr00r00         [24]  217 	call	___memcpy
-                                    218 ;src/pathfinding/astar.c:52: uint8_t i = 0;
+                                    218 ;src/pathfinding/astar.c:54: uint8_t i = 0;
     000000C5 0E 00            [ 8]  219 	ld	c, #0x00
-                                    220 ;src/pathfinding/astar.c:53: while (1) {
+                                    220 ;src/pathfinding/astar.c:55: while (1) {
     000000C7                        221 00110$:
-                                    222 ;src/pathfinding/astar.c:54: uint8_t l = (i << 1) + 1u;
+                                    222 ;src/pathfinding/astar.c:56: uint8_t l = (i << 1) + 1u;
     000000C7 79               [ 4]  223 	ld	a, c
     000000C8 87               [ 4]  224 	add	a, a
-                                    225 ;src/pathfinding/astar.c:55: uint8_t r = l + 1u;
+                                    225 ;src/pathfinding/astar.c:57: uint8_t r = l + 1u;
     000000C9 3C               [ 4]  226 	inc	a
     000000CA 47               [ 4]  227 	ld	b, a
     000000CB 3C               [ 4]  228 	inc	a
     000000CC F8 08            [12]  229 	ldhl	sp,	#8
     000000CE 77               [ 8]  230 	ld	(hl), a
-                                    231 ;src/pathfinding/astar.c:56: uint8_t s = i;
+                                    231 ;src/pathfinding/astar.c:58: uint8_t s = i;
     000000CF F8 03            [12]  232 	ldhl	sp,	#3
     000000D1 71               [ 8]  233 	ld	(hl), c
-                                    234 ;src/pathfinding/astar.c:57: if (l < heap_size && heap[l].f < heap[s].f) s = l;
+                                    234 ;src/pathfinding/astar.c:59: if (l < heap_size && heap[l].f < heap[s].f) s = l;
     000000D2 59               [ 4]  235 	ld	e, c
     000000D3 16 00            [ 8]  236 	ld	d, #0x00
     000000D5 6B               [ 4]  237 	ld	l, e
@@ -247,7 +247,7 @@
     000000E0 F8 05            [12]  247 	ldhl	sp,	#5
     000000E2 77               [ 8]  248 	ld	(hl), a
     000000E3 78               [ 4]  249 	ld	a, b
-    000000E4 21r63r06         [12]  250 	ld	hl, #_heap_size
+    000000E4 21r4Er03         [12]  250 	ld	hl, #_heap_size
     000000E7 96               [ 8]  251 	sub	a, (hl)
     000000E8 30 25            [12]  252 	jr	NC, 00102$
     000000EA 58               [ 4]  253 	ld	e, b
@@ -256,12 +256,12 @@
     000000EE 62               [ 4]  256 	ld	h, d
     000000EF 29               [ 8]  257 	add	hl, hl
     000000F0 19               [ 8]  258 	add	hl, de
-    000000F1 11rC0r03         [12]  259 	ld	de, #_heap
+    000000F1 11r40r02         [12]  259 	ld	de, #_heap
     000000F4 19               [ 8]  260 	add	hl, de
     000000F5 7E               [ 8]  261 	ld	a, (hl)
     000000F6 F8 09            [12]  262 	ldhl	sp,	#9
     000000F8 77               [ 8]  263 	ld	(hl), a
-    000000F9 11rC0r03         [12]  264 	ld	de, #_heap
+    000000F9 11r40r02         [12]  264 	ld	de, #_heap
     000000FC F8 04            [12]  265 	ldhl	sp,	#4
     000000FE 2A               [ 8]  266 	ld	a,	(hl+)
     000000FF 66               [ 8]  267 	ld	h, (hl)
@@ -278,10 +278,10 @@
     0000010C F8 03            [12]  278 	ldhl	sp,	#3
     0000010E 70               [ 8]  279 	ld	(hl), b
     0000010F                        280 00102$:
-                                    281 ;src/pathfinding/astar.c:58: if (r < heap_size && heap[r].f < heap[s].f) s = r;
+                                    281 ;src/pathfinding/astar.c:60: if (r < heap_size && heap[r].f < heap[s].f) s = r;
     0000010F F8 08            [12]  282 	ldhl	sp,	#8
     00000111 7E               [ 8]  283 	ld	a, (hl)
-    00000112 21r63r06         [12]  284 	ld	hl, #_heap_size
+    00000112 21r4Er03         [12]  284 	ld	hl, #_heap_size
     00000115 96               [ 8]  285 	sub	a, (hl)
     00000116 30 26            [12]  286 	jr	NC, 00105$
     00000118 F8 08            [12]  287 	ldhl	sp,	#8
@@ -291,7 +291,7 @@
     0000011E 62               [ 4]  291 	ld	h, d
     0000011F 29               [ 8]  292 	add	hl, hl
     00000120 19               [ 8]  293 	add	hl, de
-    00000121 11rC0r03         [12]  294 	ld	de, #_heap
+    00000121 11r40r02         [12]  294 	ld	de, #_heap
     00000124 19               [ 8]  295 	add	hl, de
     00000125 46               [ 8]  296 	ld	b, (hl)
     00000126 F8 03            [12]  297 	ldhl	sp,	#3
@@ -301,7 +301,7 @@
     0000012C 62               [ 4]  301 	ld	h, d
     0000012D 29               [ 8]  302 	add	hl, hl
     0000012E 19               [ 8]  303 	add	hl, de
-    0000012F 11rC0r03         [12]  304 	ld	de, #_heap
+    0000012F 11r40r02         [12]  304 	ld	de, #_heap
     00000132 19               [ 8]  305 	add	hl, de
     00000133 5E               [ 8]  306 	ld	e, (hl)
     00000134 78               [ 4]  307 	ld	a, b
@@ -312,12 +312,12 @@
     0000013B F8 03            [12]  312 	ldhl	sp,	#3
     0000013D 77               [ 8]  313 	ld	(hl), a
     0000013E                        314 00105$:
-                                    315 ;src/pathfinding/astar.c:59: if (s == i) break;
+                                    315 ;src/pathfinding/astar.c:61: if (s == i) break;
     0000013E F8 03            [12]  316 	ldhl	sp,	#3
     00000140 7E               [ 8]  317 	ld	a, (hl)
     00000141 91               [ 4]  318 	sub	a, c
     00000142 28 61            [12]  319 	jr	Z, 00112$
-                                    320 ;src/pathfinding/astar.c:60: HeapEntry tmp = heap[s]; heap[s] = heap[i]; heap[i] = tmp;
+                                    320 ;src/pathfinding/astar.c:62: HeapEntry tmp = heap[s]; heap[s] = heap[i]; heap[i] = tmp;
     00000144 F8 03            [12]  321 	ldhl	sp,	#3
     00000146 4E               [ 8]  322 	ld	c, (hl)
     00000147 06 00            [ 8]  323 	ld	b, #0x00
@@ -333,7 +333,7 @@
     00000153 7C               [ 4]  333 	ld	a, h
     00000154 F8 07            [12]  334 	ldhl	sp,	#7
     00000156 77               [ 8]  335 	ld	(hl), a
-    00000157 11rC0r03         [12]  336 	ld	de, #_heap
+    00000157 11r40r02         [12]  336 	ld	de, #_heap
     0000015A 3A               [ 8]  337 	ld	a, (hl-)
     0000015B 6E               [ 8]  338 	ld	l, (hl)
     0000015C 67               [ 4]  339 	ld	h, a
@@ -359,7 +359,7 @@
     00000176 5D               [ 4]  359 	ld	e, l
     00000177 54               [ 4]  360 	ld	d, h
     00000178 CDr00r00         [24]  361 	call	___memcpy
-    0000017B 11rC0r03         [12]  362 	ld	de, #_heap
+    0000017B 11r40r02         [12]  362 	ld	de, #_heap
     0000017E F8 06            [12]  363 	ldhl	sp,	#6
     00000180 2A               [ 8]  364 	ld	a,	(hl+)
     00000181 66               [ 8]  365 	ld	h, (hl)
@@ -382,21 +382,21 @@
     0000019A 44               [ 4]  382 	ld	b, h
     0000019B D1               [12]  383 	pop	de
     0000019C CDr00r00         [24]  384 	call	___memcpy
-                                    385 ;src/pathfinding/astar.c:61: i = s;
+                                    385 ;src/pathfinding/astar.c:63: i = s;
     0000019F F8 03            [12]  386 	ldhl	sp,	#3
     000001A1 4E               [ 8]  387 	ld	c, (hl)
     000001A2 C3rC7r00         [16]  388 	jp	00110$
     000001A5                        389 00112$:
-                                    390 ;src/pathfinding/astar.c:63: }
+                                    390 ;src/pathfinding/astar.c:65: }
     000001A5 E8 0A            [16]  391 	add	sp, #10
     000001A7 C9               [16]  392 	ret
-                                    393 ;src/pathfinding/astar.c:66: static uint8_t manhattan(uint8_t ax, uint8_t ay, uint8_t bx, uint8_t by) {
+                                    393 ;src/pathfinding/astar.c:68: static uint8_t manhattan(uint8_t ax, uint8_t ay, uint8_t bx, uint8_t by) {
                                     394 ;	---------------------------------
                                     395 ; Function manhattan
                                     396 ; ---------------------------------
     000001A8                        397 _manhattan:
     000001A8 4F               [ 4]  398 	ld	c, a
-                                    399 ;src/pathfinding/astar.c:67: uint8_t dx = (ax > bx) ? (ax - bx) : (bx - ax);
+                                    399 ;src/pathfinding/astar.c:69: uint8_t dx = (ax > bx) ? (ax - bx) : (bx - ax);
     000001A9 F8 02            [12]  400 	ldhl	sp,	#2
     000001AB 7E               [ 8]  401 	ld	a, (hl)
     000001AC 91               [ 4]  402 	sub	a, c
@@ -410,7 +410,7 @@
     000001B6 91               [ 4]  410 	sub	a, c
     000001B7                        411 00104$:
     000001B7 4F               [ 4]  412 	ld	c, a
-                                    413 ;src/pathfinding/astar.c:68: uint8_t dy = (ay > by) ? (ay - by) : (by - ay);
+                                    413 ;src/pathfinding/astar.c:70: uint8_t dy = (ay > by) ? (ay - by) : (by - ay);
     000001B8 F8 03            [12]  414 	ldhl	sp,	#3
     000001BA 7E               [ 8]  415 	ld	a, (hl)
     000001BB 93               [ 4]  416 	sub	a, e
@@ -423,13 +423,13 @@
     000001C4 7E               [ 8]  423 	ld	a, (hl)
     000001C5 93               [ 4]  424 	sub	a, e
     000001C6                        425 00106$:
-                                    426 ;src/pathfinding/astar.c:69: return dx + dy;
+                                    426 ;src/pathfinding/astar.c:71: return dx + dy;
     000001C6 81               [ 4]  427 	add	a, c
-                                    428 ;src/pathfinding/astar.c:70: }
+                                    428 ;src/pathfinding/astar.c:72: }
     000001C7 E1               [12]  429 	pop	hl
     000001C8 C1               [12]  430 	pop	bc
     000001C9 E9               [ 4]  431 	jp	(hl)
-                                    432 ;src/pathfinding/astar.c:76: uint8_t astar_find(uint8_t sx, uint8_t sy,
+                                    432 ;src/pathfinding/astar.c:78: uint8_t astar_find(uint8_t sx, uint8_t sy,
                                     433 ;	---------------------------------
                                     434 ; Function astar_find
                                     435 ; ---------------------------------
@@ -437,464 +437,466 @@
     000001CA E8 F6            [16]  437 	add	sp, #-10
     000001CC 4F               [ 4]  438 	ld	c, a
     000001CD 43               [ 4]  439 	ld	b, e
-                                    440 ;src/pathfinding/astar.c:82: memset(node_g,     0xFF, ASTAR_TOTAL);
-    000001CE 11 F0 00         [12]  441 	ld	de, #0x00f0
-    000001D1 D5               [16]  442 	push	de
-    000001D2 11 FF 00         [12]  443 	ld	de, #0x00ff
-    000001D5 D5               [16]  444 	push	de
-    000001D6 11r00r00         [12]  445 	ld	de, #_node_g
-    000001D9 D5               [16]  446 	push	de
-    000001DA CDr00r00         [24]  447 	call	_memset
-    000001DD E8 06            [16]  448 	add	sp, #6
-                                    449 ;src/pathfinding/astar.c:83: memset(node_flags, 0,    ASTAR_TOTAL);
-    000001DF 11 F0 00         [12]  450 	ld	de, #0x00f0
-    000001E2 D5               [16]  451 	push	de
-    000001E3 11 00 00         [12]  452 	ld	de, #0x0000
-    000001E6 D5               [16]  453 	push	de
-    000001E7 11rF0r00         [12]  454 	ld	de, #_node_flags
-    000001EA D5               [16]  455 	push	de
-    000001EB CDr00r00         [24]  456 	call	_memset
-    000001EE E8 06            [16]  457 	add	sp, #6
-                                    458 ;src/pathfinding/astar.c:84: heap_size = 0;
-    000001F0 AF               [ 4]  459 	xor	a, a
-    000001F1 EAr63r06         [16]  460 	ld	(#_heap_size),a
-                                    461 ;src/pathfinding/astar.c:86: uint8_t si = IDX(sx, sy);
-    000001F4 78               [ 4]  462 	ld	a, b
-    000001F5 CB 37            [ 8]  463 	swap	a
-    000001F7 E6 F0            [ 8]  464 	and	a, #0xf0
-    000001F9 B1               [ 4]  465 	or	a, c
-    000001FA 5F               [ 4]  466 	ld	e, a
-                                    467 ;src/pathfinding/astar.c:87: node_g    [si] = 0;
-    000001FB 21r00r00         [12]  468 	ld	hl, #_node_g
-    000001FE 16 00            [ 8]  469 	ld	d, #0x00
-    00000200 19               [ 8]  470 	add	hl, de
-    00000201 36 00            [12]  471 	ld	(hl), #0x00
-                                    472 ;src/pathfinding/astar.c:88: node_flags[si] = FLAG_OPEN;
-    00000203 21rF0r00         [12]  473 	ld	hl, #_node_flags
-    00000206 16 00            [ 8]  474 	ld	d, #0x00
-    00000208 19               [ 8]  475 	add	hl, de
-    00000209 36 01            [12]  476 	ld	(hl), #0x01
-                                    477 ;src/pathfinding/astar.c:89: node_par_x[si] = 0xFF;          /* sentinel: start tile has no parent */
-    0000020B 21rE0r01         [12]  478 	ld	hl, #_node_par_x
-    0000020E 16 00            [ 8]  479 	ld	d, #0x00
-    00000210 19               [ 8]  480 	add	hl, de
-    00000211 36 FF            [12]  481 	ld	(hl), #0xff
-                                    482 ;src/pathfinding/astar.c:90: heap_push(manhattan(sx, sy, gx, gy), sx, sy);
-    00000213 C5               [16]  483 	push	bc
-    00000214 F8 0F            [12]  484 	ldhl	sp,	#15
-    00000216 3A               [ 8]  485 	ld	a, (hl-)
-    00000217 57               [ 4]  486 	ld	d, a
-    00000218 5E               [ 8]  487 	ld	e, (hl)
-    00000219 D5               [16]  488 	push	de
-    0000021A 58               [ 4]  489 	ld	e, b
-    0000021B 79               [ 4]  490 	ld	a, c
-    0000021C CDrA8r01         [24]  491 	call	_manhattan
-    0000021F C1               [12]  492 	pop	bc
-    00000220 C5               [16]  493 	push	bc
-    00000221 33               [ 8]  494 	inc	sp
-    00000222 59               [ 4]  495 	ld	e, c
-    00000223 CDr00r00         [24]  496 	call	_heap_push
-                                    497 ;src/pathfinding/astar.c:92: while (heap_size > 0) {
-    00000226                        498 00129$:
-    00000226 FAr63r06         [16]  499 	ld	a, (#_heap_size)
-    00000229 B7               [ 4]  500 	or	a, a
-    0000022A CAr12r04         [16]  501 	jp	Z, 00131$
-                                    502 ;src/pathfinding/astar.c:94: heap_pop(&cx, &cy);
-    0000022D 21 01 00         [12]  503 	ld	hl, #1
-    00000230 39               [ 8]  504 	add	hl, sp
-    00000231 4D               [ 4]  505 	ld	c, l
-    00000232 44               [ 4]  506 	ld	b, h
-    00000233 21 00 00         [12]  507 	ld	hl, #0
-    00000236 39               [ 8]  508 	add	hl, sp
-    00000237 5D               [ 4]  509 	ld	e, l
-    00000238 54               [ 4]  510 	ld	d, h
-    00000239 CDrA0r00         [24]  511 	call	_heap_pop
-                                    512 ;src/pathfinding/astar.c:96: uint8_t ci = IDX(cx, cy);
-    0000023C F8 01            [12]  513 	ldhl	sp,	#1
-    0000023E 3A               [ 8]  514 	ld	a, (hl-)
-    0000023F CB 37            [ 8]  515 	swap	a
-    00000241 E6 F0            [ 8]  516 	and	a, #0xf0
-    00000243 B6               [ 8]  517 	or	a, (hl)
-    00000244 F8 09            [12]  518 	ldhl	sp,	#9
-    00000246 77               [ 8]  519 	ld	(hl), a
-                                    520 ;src/pathfinding/astar.c:99: if (node_flags[ci] & FLAG_CLOSED) continue;
-    00000247 11rF0r00         [12]  521 	ld	de, #_node_flags
-    0000024A 6E               [ 8]  522 	ld	l, (hl)
-    0000024B 26 00            [ 8]  523 	ld	h, #0x00
-    0000024D 19               [ 8]  524 	add	hl, de
-    0000024E 4D               [ 4]  525 	ld	c, l
-    0000024F 44               [ 4]  526 	ld	b, h
-    00000250 0A               [ 8]  527 	ld	a, (bc)
-    00000251 CB 4F            [ 8]  528 	bit	1, a
-    00000253 20 D1            [12]  529 	jr	NZ, 00129$
-                                    530 ;src/pathfinding/astar.c:100: node_flags[ci] = FLAG_CLOSED;
-    00000255 3E 02            [ 8]  531 	ld	a, #0x02
-    00000257 02               [ 8]  532 	ld	(bc), a
-                                    533 ;src/pathfinding/astar.c:102: if (cx == gx && cy == gy) {
-    00000258 F8 00            [12]  534 	ldhl	sp,	#0
-    0000025A 7E               [ 8]  535 	ld	a, (hl)
-    0000025B F8 0C            [12]  536 	ldhl	sp,	#12
-    0000025D 96               [ 8]  537 	sub	a, (hl)
-    0000025E C2r3Br03         [16]  538 	jp	NZ, 00114$
-    00000261 F8 01            [12]  539 	ldhl	sp,	#1
-    00000263 7E               [ 8]  540 	ld	a, (hl)
-    00000264 F8 0D            [12]  541 	ldhl	sp,	#13
-    00000266 96               [ 8]  542 	sub	a, (hl)
-    00000267 C2r3Br03         [16]  543 	jp	NZ, 00114$
-                                    544 ;src/pathfinding/astar.c:106: uint8_t tx = gx, ty = gy;
-    0000026A F8 0C            [12]  545 	ldhl	sp,	#12
-    0000026C 7E               [ 8]  546 	ld	a, (hl)
-    0000026D F8 07            [12]  547 	ldhl	sp,	#7
-    0000026F 77               [ 8]  548 	ld	(hl), a
-    00000270 F8 04            [12]  549 	ldhl	sp,	#4
-    00000272 77               [ 8]  550 	ld	(hl), a
-    00000273 F8 0D            [12]  551 	ldhl	sp,	#13
-    00000275 7E               [ 8]  552 	ld	a, (hl)
-    00000276 F8 08            [12]  553 	ldhl	sp,	#8
-    00000278 77               [ 8]  554 	ld	(hl), a
-    00000279 3A               [ 8]  555 	ld	a, (hl-)
-    0000027A 2B               [ 8]  556 	dec	hl
-    0000027B 77               [ 8]  557 	ld	(hl), a
-                                    558 ;src/pathfinding/astar.c:107: while (len < ASTAR_MAX_PATH) {
-    0000027C F8 09            [12]  559 	ldhl	sp,	#9
-    0000027E 36 00            [12]  560 	ld	(hl), #0x00
-    00000280                        561 00105$:
-    00000280 F8 09            [12]  562 	ldhl	sp,	#9
-    00000282 7E               [ 8]  563 	ld	a, (hl)
-    00000283 D6 20            [ 8]  564 	sub	a, #0x20
-    00000285 30 37            [12]  565 	jr	NC, 00155$
-                                    566 ;src/pathfinding/astar.c:108: ++len;
-    00000287 34               [12]  567 	inc	(hl)
-                                    568 ;src/pathfinding/astar.c:109: uint8_t px = node_par_x[IDX(tx, ty)];
-    00000288 F8 06            [12]  569 	ldhl	sp,	#6
-    0000028A 3A               [ 8]  570 	ld	a, (hl-)
-    0000028B 22               [ 8]  571 	ld	(hl+), a
-    0000028C AF               [ 4]  572 	xor	a, a
-    0000028D 32               [ 8]  573 	ld	(hl-), a
-    0000028E 3A               [ 8]  574 	ld	a, (hl-)
-    0000028F 5F               [ 4]  575 	ld	e, a
-    00000290 16 00            [ 8]  576 	ld	d, #0x00
-    00000292 CB 23            [ 8]  577 	sla	e
-    00000294 CB 12            [ 8]  578 	rl	d
-    00000296 CB 23            [ 8]  579 	sla	e
-    00000298 CB 12            [ 8]  580 	rl	d
-    0000029A CB 23            [ 8]  581 	sla	e
-    0000029C CB 12            [ 8]  582 	rl	d
-    0000029E CB 23            [ 8]  583 	sla	e
-    000002A0 CB 12            [ 8]  584 	rl	d
-    000002A2 4E               [ 8]  585 	ld	c, (hl)
-    000002A3 06 00            [ 8]  586 	ld	b, #0x00
-    000002A5 7B               [ 4]  587 	ld	a, e
-    000002A6 B1               [ 4]  588 	or	a, c
-    000002A7 5F               [ 4]  589 	ld	e, a
-    000002A8 21rE0r01         [12]  590 	ld	hl, #_node_par_x
-    000002AB 19               [ 8]  591 	add	hl, de
-    000002AC 4E               [ 8]  592 	ld	c, (hl)
-                                    593 ;src/pathfinding/astar.c:110: if (px == 0xFF) break;
-    000002AD 79               [ 4]  594 	ld	a, c
-    000002AE 3C               [ 4]  595 	inc	a
-    000002AF 28 0D            [12]  596 	jr	Z, 00155$
-                                    597 ;src/pathfinding/astar.c:111: uint8_t py = node_par_y[IDX(tx, ty)];
-    000002B1 21rD0r02         [12]  598 	ld	hl, #_node_par_y
-    000002B4 19               [ 8]  599 	add	hl, de
-    000002B5 7E               [ 8]  600 	ld	a, (hl)
-    000002B6 F8 06            [12]  601 	ldhl	sp,	#6
-    000002B8 77               [ 8]  602 	ld	(hl), a
-                                    603 ;src/pathfinding/astar.c:112: tx = px; ty = py;
-    000002B9 F8 04            [12]  604 	ldhl	sp,	#4
-    000002BB 71               [ 8]  605 	ld	(hl), c
-    000002BC 18 C2            [12]  606 	jr	00105$
-    000002BE                        607 00155$:
-    000002BE F8 09            [12]  608 	ldhl	sp,	#9
-    000002C0 7E               [ 8]  609 	ld	a, (hl)
-    000002C1 F8 02            [12]  610 	ldhl	sp,	#2
-    000002C3 77               [ 8]  611 	ld	(hl), a
-                                    612 ;src/pathfinding/astar.c:116: tx = gx; ty = gy;
-    000002C4 F8 07            [12]  613 	ldhl	sp,	#7
-    000002C6 7E               [ 8]  614 	ld	a, (hl)
-    000002C7 F8 03            [12]  615 	ldhl	sp,	#3
-    000002C9 77               [ 8]  616 	ld	(hl), a
-    000002CA F8 08            [12]  617 	ldhl	sp,	#8
-    000002CC 7E               [ 8]  618 	ld	a, (hl)
-    000002CD F8 04            [12]  619 	ldhl	sp,	#4
-    000002CF 77               [ 8]  620 	ld	(hl), a
-                                    621 ;src/pathfinding/astar.c:117: while (i > 0) {
-    000002D0                        622 00110$:
-    000002D0 F8 09            [12]  623 	ldhl	sp,	#9
-    000002D2 7E               [ 8]  624 	ld	a, (hl)
-    000002D3 B7               [ 4]  625 	or	a, a
-    000002D4 28 5F            [12]  626 	jr	Z, 00112$
-                                    627 ;src/pathfinding/astar.c:118: --i;
-    000002D6 35               [12]  628 	dec	(hl)
-                                    629 ;src/pathfinding/astar.c:119: out_path[i].x = tx;
-    000002D7 3A               [ 8]  630 	ld	a, (hl-)
-    000002D8 2B               [ 8]  631 	dec	hl
-    000002D9 22               [ 8]  632 	ld	(hl+), a
-    000002DA AF               [ 4]  633 	xor	a, a
-    000002DB 32               [ 8]  634 	ld	(hl-), a
-    000002DC 3A               [ 8]  635 	ld	a, (hl-)
-    000002DD 2B               [ 8]  636 	dec	hl
-    000002DE 22               [ 8]  637 	ld	(hl+), a
-    000002DF AF               [ 4]  638 	xor	a, a
-    000002E0 32               [ 8]  639 	ld	(hl-), a
-    000002E1 CB 26            [16]  640 	sla	(hl)
-    000002E3 23               [ 8]  641 	inc	hl
-    000002E4 CB 16            [16]  642 	rl	(hl)
-    000002E6 2B               [ 8]  643 	dec	hl
-    000002E7 2A               [ 8]  644 	ld	a, (hl+)
-    000002E8 5F               [ 4]  645 	ld	e, a
-    000002E9 56               [ 8]  646 	ld	d, (hl)
-    000002EA F8 10            [12]  647 	ldhl	sp,	#16
-    000002EC 2A               [ 8]  648 	ld	a,	(hl+)
-    000002ED 66               [ 8]  649 	ld	h, (hl)
-    000002EE 6F               [ 4]  650 	ld	l, a
-    000002EF 19               [ 8]  651 	add	hl, de
-    000002F0 E5               [16]  652 	push	hl
-    000002F1 7D               [ 4]  653 	ld	a, l
-    000002F2 F8 09            [12]  654 	ldhl	sp,	#9
-    000002F4 77               [ 8]  655 	ld	(hl), a
-    000002F5 E1               [12]  656 	pop	hl
-    000002F6 7C               [ 4]  657 	ld	a, h
-    000002F7 F8 08            [12]  658 	ldhl	sp,	#8
-    000002F9 32               [ 8]  659 	ld	(hl-), a
-    000002FA 2A               [ 8]  660 	ld	a, (hl+)
-    000002FB 5F               [ 4]  661 	ld	e, a
-    000002FC 56               [ 8]  662 	ld	d, (hl)
-    000002FD F8 03            [12]  663 	ldhl	sp,	#3
-    000002FF 7E               [ 8]  664 	ld	a, (hl)
-    00000300 12               [ 8]  665 	ld	(de), a
-                                    666 ;src/pathfinding/astar.c:120: out_path[i].y = ty;
-    00000301 F8 07            [12]  667 	ldhl	sp,	#7
-    00000303 2A               [ 8]  668 	ld	a, (hl+)
-    00000304 4F               [ 4]  669 	ld	c, a
-    00000305 46               [ 8]  670 	ld	b, (hl)
-    00000306 03               [ 8]  671 	inc	bc
-    00000307 F8 04            [12]  672 	ldhl	sp,	#4
-    00000309 7E               [ 8]  673 	ld	a, (hl)
-    0000030A 02               [ 8]  674 	ld	(bc), a
-                                    675 ;src/pathfinding/astar.c:121: uint8_t px = node_par_x[IDX(tx, ty)];
-    0000030B 3A               [ 8]  676 	ld	a, (hl-)
-    0000030C 16 00            [ 8]  677 	ld	d, #0x00
-    0000030E 87               [ 4]  678 	add	a, a
-    0000030F CB 12            [ 8]  679 	rl	d
-    00000311 87               [ 4]  680 	add	a, a
-    00000312 CB 12            [ 8]  681 	rl	d
-    00000314 87               [ 4]  682 	add	a, a
-    00000315 CB 12            [ 8]  683 	rl	d
-    00000317 87               [ 4]  684 	add	a, a
-    00000318 CB 12            [ 8]  685 	rl	d
-    0000031A 4E               [ 8]  686 	ld	c, (hl)
-    0000031B 06 00            [ 8]  687 	ld	b, #0x00
-    0000031D B1               [ 4]  688 	or	a, c
-    0000031E 5F               [ 4]  689 	ld	e, a
-    0000031F 21rE0r01         [12]  690 	ld	hl, #_node_par_x
-    00000322 19               [ 8]  691 	add	hl, de
-    00000323 4E               [ 8]  692 	ld	c, (hl)
-                                    693 ;src/pathfinding/astar.c:122: if (px == 0xFF) break;
-    00000324 79               [ 4]  694 	ld	a, c
-    00000325 3C               [ 4]  695 	inc	a
-    00000326 28 0D            [12]  696 	jr	Z, 00112$
-                                    697 ;src/pathfinding/astar.c:123: uint8_t py = node_par_y[IDX(tx, ty)];
-    00000328 21rD0r02         [12]  698 	ld	hl, #_node_par_y
-    0000032B 19               [ 8]  699 	add	hl, de
-    0000032C 7E               [ 8]  700 	ld	a, (hl)
-    0000032D F8 04            [12]  701 	ldhl	sp,	#4
-    0000032F 77               [ 8]  702 	ld	(hl), a
-                                    703 ;src/pathfinding/astar.c:124: tx = px; ty = py;
-    00000330 F8 03            [12]  704 	ldhl	sp,	#3
-    00000332 71               [ 8]  705 	ld	(hl), c
-    00000333 18 9B            [12]  706 	jr	00110$
-    00000335                        707 00112$:
-                                    708 ;src/pathfinding/astar.c:126: return len;
-    00000335 F8 02            [12]  709 	ldhl	sp,	#2
-    00000337 7E               [ 8]  710 	ld	a, (hl)
-    00000338 C3r13r04         [16]  711 	jp	00133$
-    0000033B                        712 00114$:
-                                    713 ;src/pathfinding/astar.c:130: uint8_t cg  = node_g[ci];
-    0000033B 11r00r00         [12]  714 	ld	de, #_node_g
-    0000033E F8 09            [12]  715 	ldhl	sp,	#9
-    00000340 6E               [ 8]  716 	ld	l, (hl)
-    00000341 26 00            [ 8]  717 	ld	h, #0x00
-    00000343 19               [ 8]  718 	add	hl, de
-    00000344 4D               [ 4]  719 	ld	c, l
-    00000345 44               [ 4]  720 	ld	b, h
-    00000346 0A               [ 8]  721 	ld	a, (bc)
-                                    722 ;src/pathfinding/astar.c:132: for (dir = 0; dir < 4; ++dir) {
-    00000347 4F               [ 4]  723 	ld	c, a
-    00000348 0C               [ 4]  724 	inc	c
-    00000349 06 00            [ 8]  725 	ld	b, #0x00
-    0000034B                        726 00132$:
-                                    727 ;src/pathfinding/astar.c:133: int8_t nx = (int8_t)cx + DIR_DX[dir];
-    0000034B F8 00            [12]  728 	ldhl	sp,	#0
-    0000034D 5E               [ 8]  729 	ld	e, (hl)
-    0000034E 3Er19            [ 8]  730 	ld	a, #<(_DIR_DX)
-    00000350 80               [ 4]  731 	add	a, b
-    00000351 6F               [ 4]  732 	ld	l, a
-    00000352 3Es04            [ 8]  733 	ld	a, #>(_DIR_DX)
-    00000354 CE 00            [ 8]  734 	adc	a, #0x00
-    00000356 67               [ 4]  735 	ld	h, a
-    00000357 7E               [ 8]  736 	ld	a, (hl)
-    00000358 83               [ 4]  737 	add	a, e
-    00000359 F8 08            [12]  738 	ldhl	sp,	#8
-    0000035B 77               [ 8]  739 	ld	(hl), a
-                                    740 ;src/pathfinding/astar.c:134: int8_t ny = (int8_t)cy + DIR_DY[dir];
-    0000035C F8 01            [12]  741 	ldhl	sp,	#1
-    0000035E 5E               [ 8]  742 	ld	e, (hl)
-    0000035F 3Er1D            [ 8]  743 	ld	a, #<(_DIR_DY)
-    00000361 80               [ 4]  744 	add	a, b
-    00000362 6F               [ 4]  745 	ld	l, a
-    00000363 3Es04            [ 8]  746 	ld	a, #>(_DIR_DY)
-    00000365 CE 00            [ 8]  747 	adc	a, #0x00
-    00000367 67               [ 4]  748 	ld	h, a
-    00000368 7E               [ 8]  749 	ld	a, (hl)
-    00000369 83               [ 4]  750 	add	a, e
-    0000036A F8 09            [12]  751 	ldhl	sp,	#9
-                                    752 ;src/pathfinding/astar.c:135: if (nx < 0 || ny < 0 ||
-    0000036C 32               [ 8]  753 	ld	(hl-), a
-    0000036D CB 7E            [12]  754 	bit	7, (hl)
-    0000036F C2r08r04         [16]  755 	jp	NZ, 00127$
-    00000372 23               [ 8]  756 	inc	hl
-    00000373 CB 7E            [12]  757 	bit	7, (hl)
-    00000375 C2r08r04         [16]  758 	jp	NZ, 00127$
-                                    759 ;src/pathfinding/astar.c:136: nx >= (int8_t)ASTAR_GRID_W ||
-    00000378 2B               [ 8]  760 	dec	hl
-    00000379 7E               [ 8]  761 	ld	a, (hl)
-    0000037A EE 80            [ 8]  762 	xor	a, #0x80
-    0000037C D6 8F            [ 8]  763 	sub	a, #0x8f
-    0000037E D2r08r04         [16]  764 	jp	NC, 00127$
-                                    765 ;src/pathfinding/astar.c:137: ny >= (int8_t)ASTAR_GRID_H)
-    00000381 23               [ 8]  766 	inc	hl
-    00000382 7E               [ 8]  767 	ld	a, (hl)
-    00000383 EE 80            [ 8]  768 	xor	a, #0x80
-    00000385 D6 8F            [ 8]  769 	sub	a, #0x8f
-    00000387 D2r08r04         [16]  770 	jp	NC, 00127$
-                                    771 ;src/pathfinding/astar.c:140: uint8_t ux = (uint8_t)nx;
-    0000038A 2B               [ 8]  772 	dec	hl
-    0000038B 3A               [ 8]  773 	ld	a, (hl-)
-                                    774 ;src/pathfinding/astar.c:141: uint8_t uy = (uint8_t)ny;
-    0000038C 22               [ 8]  775 	ld	(hl+), a
-    0000038D 23               [ 8]  776 	inc	hl
-    0000038E 3A               [ 8]  777 	ld	a, (hl-)
-                                    778 ;src/pathfinding/astar.c:142: uint8_t ni = IDX(ux, uy);
-    0000038F 32               [ 8]  779 	ld	(hl-), a
-    00000390 CB 37            [ 8]  780 	swap	a
-    00000392 E6 F0            [ 8]  781 	and	a, #0xf0
-    00000394 B6               [ 8]  782 	or	a, (hl)
-    00000395 23               [ 8]  783 	inc	hl
-    00000396 23               [ 8]  784 	inc	hl
-    00000397 77               [ 8]  785 	ld	(hl), a
-                                    786 ;src/pathfinding/astar.c:144: if (node_flags[ni] & FLAG_CLOSED) continue;
-    00000398 11rF0r00         [12]  787 	ld	de, #_node_flags
-    0000039B 6E               [ 8]  788 	ld	l, (hl)
-    0000039C 26 00            [ 8]  789 	ld	h, #0x00
-    0000039E 19               [ 8]  790 	add	hl, de
-    0000039F 5D               [ 4]  791 	ld	e, l
-    000003A0 54               [ 4]  792 	ld	d, h
-    000003A1 1A               [ 8]  793 	ld	a, (de)
-    000003A2 CB 4F            [ 8]  794 	bit	1, a
-    000003A4 20 62            [12]  795 	jr	NZ, 00127$
-                                    796 ;src/pathfinding/astar.c:145: if (!walkable(ux, uy))            continue;
-    000003A6 C5               [16]  797 	push	bc
-    000003A7 F8 0A            [12]  798 	ldhl	sp,	#10
-    000003A9 3A               [ 8]  799 	ld	a, (hl-)
-    000003AA 5F               [ 4]  800 	ld	e, a
-    000003AB 7E               [ 8]  801 	ld	a, (hl)
-    000003AC F5               [16]  802 	push	af
-    000003AD F8 12            [12]  803 	ldhl	sp,	#18
-    000003AF 2A               [ 8]  804 	ld	a, (hl+)
-    000003B0 66               [ 8]  805 	ld	h, (hl)
-    000003B1 6F               [ 4]  806 	ld	l, a
-    000003B2 F1               [12]  807 	pop	af
-    000003B3 CDr00r00         [24]  808 	call	___sdcc_call_hl
-    000003B6 C1               [12]  809 	pop	bc
-    000003B7 B7               [ 4]  810 	or	a, a
-    000003B8 28 4E            [12]  811 	jr	Z, 00127$
-                                    812 ;src/pathfinding/astar.c:148: if (ng < node_g[ni]) {
-    000003BA 11r00r00         [12]  813 	ld	de, #_node_g
-    000003BD F8 09            [12]  814 	ldhl	sp,	#9
-    000003BF 6E               [ 8]  815 	ld	l, (hl)
-    000003C0 26 00            [ 8]  816 	ld	h, #0x00
-    000003C2 19               [ 8]  817 	add	hl, de
-    000003C3 5D               [ 4]  818 	ld	e, l
-    000003C4 54               [ 4]  819 	ld	d, h
-    000003C5 1A               [ 8]  820 	ld	a, (de)
-    000003C6 6F               [ 4]  821 	ld	l, a
-                                    822 ;src/pathfinding/astar.c:149: node_g    [ni] = ng;
-    000003C7 79               [ 4]  823 	ld	a,c
-    000003C8 BD               [ 4]  824 	cp	a,l
-    000003C9 30 3D            [12]  825 	jr	NC, 00127$
-    000003CB 12               [ 8]  826 	ld	(de), a
-                                    827 ;src/pathfinding/astar.c:150: node_par_x[ni] = cx;
-    000003CC 11rE0r01         [12]  828 	ld	de, #_node_par_x
-    000003CF F8 09            [12]  829 	ldhl	sp,	#9
-    000003D1 6E               [ 8]  830 	ld	l, (hl)
-    000003D2 26 00            [ 8]  831 	ld	h, #0x00
-    000003D4 19               [ 8]  832 	add	hl, de
-    000003D5 5D               [ 4]  833 	ld	e, l
-    000003D6 54               [ 4]  834 	ld	d, h
-    000003D7 F8 00            [12]  835 	ldhl	sp,	#0
-    000003D9 7E               [ 8]  836 	ld	a, (hl)
-    000003DA 12               [ 8]  837 	ld	(de), a
-                                    838 ;src/pathfinding/astar.c:151: node_par_y[ni] = cy;
-    000003DB 11rD0r02         [12]  839 	ld	de, #_node_par_y
-    000003DE F8 09            [12]  840 	ldhl	sp,	#9
-    000003E0 6E               [ 8]  841 	ld	l, (hl)
-    000003E1 26 00            [ 8]  842 	ld	h, #0x00
-    000003E3 19               [ 8]  843 	add	hl, de
-    000003E4 5D               [ 4]  844 	ld	e, l
-    000003E5 54               [ 4]  845 	ld	d, h
-    000003E6 F8 01            [12]  846 	ldhl	sp,	#1
-    000003E8 7E               [ 8]  847 	ld	a, (hl)
-    000003E9 12               [ 8]  848 	ld	(de), a
-                                    849 ;src/pathfinding/astar.c:153: heap_push(ng + manhattan(ux, uy, gx, gy), ux, uy);
-    000003EA C5               [16]  850 	push	bc
-    000003EB F8 0F            [12]  851 	ldhl	sp,	#15
-    000003ED 3A               [ 8]  852 	ld	a, (hl-)
-    000003EE 57               [ 4]  853 	ld	d, a
-    000003EF 5E               [ 8]  854 	ld	e, (hl)
-    000003F0 D5               [16]  855 	push	de
-    000003F1 F8 0C            [12]  856 	ldhl	sp,	#12
-    000003F3 3A               [ 8]  857 	ld	a, (hl-)
-    000003F4 5F               [ 4]  858 	ld	e, a
-    000003F5 7E               [ 8]  859 	ld	a, (hl)
-    000003F6 CDrA8r01         [24]  860 	call	_manhattan
-    000003F9 C1               [12]  861 	pop	bc
-    000003FA 81               [ 4]  862 	add	a, c
-    000003FB C5               [16]  863 	push	bc
-    000003FC F8 0A            [12]  864 	ldhl	sp,	#10
-    000003FE 66               [ 8]  865 	ld	h, (hl)
-    000003FF E5               [16]  866 	push	hl
-    00000400 33               [ 8]  867 	inc	sp
-    00000401 F8 0A            [12]  868 	ldhl	sp,	#10
-    00000403 5E               [ 8]  869 	ld	e, (hl)
-    00000404 CDr00r00         [24]  870 	call	_heap_push
-    00000407 C1               [12]  871 	pop	bc
-    00000408                        872 00127$:
-                                    873 ;src/pathfinding/astar.c:132: for (dir = 0; dir < 4; ++dir) {
-    00000408 04               [ 4]  874 	inc	b
-    00000409 78               [ 4]  875 	ld	a, b
-    0000040A D6 04            [ 8]  876 	sub	a, #0x04
-    0000040C DAr4Br03         [16]  877 	jp	C, 00132$
-    0000040F C3r26r02         [16]  878 	jp	00129$
-    00000412                        879 00131$:
-                                    880 ;src/pathfinding/astar.c:158: return 0;   /* no path found */
-    00000412 AF               [ 4]  881 	xor	a, a
-    00000413                        882 00133$:
-                                    883 ;src/pathfinding/astar.c:159: }
-    00000413 E8 0A            [16]  884 	add	sp, #10
-    00000415 E1               [12]  885 	pop	hl
-    00000416 E8 06            [16]  886 	add	sp, #6
-    00000418 E9               [ 4]  887 	jp	(hl)
-    00000419                        888 _DIR_DX:
-    00000419 00                     889 	.db #0x00	;  0
-    0000041A 00                     890 	.db #0x00	;  0
-    0000041B FF                     891 	.db #0xff	; -1
-    0000041C 01                     892 	.db #0x01	;  1
-    0000041D                        893 _DIR_DY:
-    0000041D FF                     894 	.db #0xff	; -1
-    0000041E 01                     895 	.db #0x01	;  1
-    0000041F 00                     896 	.db #0x00	;  0
-    00000420 00                     897 	.db #0x00	;  0
-                                    898 	.area _CODE
-                                    899 	.area _INITIALIZER
-                                    900 	.area _CABS (ABS)
+                                    440 ;src/pathfinding/astar.c:84: memset(node_g,     0xFF, ASTAR_TOTAL);
+    000001CE AF               [ 4]  441 	xor	a, a
+    000001CF 37               [ 4]  442 	scf
+    000001D0 F5               [16]  443 	push	af
+    000001D1 11 FF 00         [12]  444 	ld	de, #0x00ff
+    000001D4 D5               [16]  445 	push	de
+    000001D5 11r00r00         [12]  446 	ld	de, #_node_g
+    000001D8 D5               [16]  447 	push	de
+    000001D9 CDr00r00         [24]  448 	call	_memset
+    000001DC E8 06            [16]  449 	add	sp, #6
+                                    450 ;src/pathfinding/astar.c:85: memset(node_flags, 0,    ASTAR_TOTAL);
+    000001DE AF               [ 4]  451 	xor	a, a
+    000001DF 37               [ 4]  452 	scf
+    000001E0 F5               [16]  453 	push	af
+    000001E1 11 00 00         [12]  454 	ld	de, #0x0000
+    000001E4 D5               [16]  455 	push	de
+    000001E5 11r90r00         [12]  456 	ld	de, #_node_flags
+    000001E8 D5               [16]  457 	push	de
+    000001E9 CDr00r00         [24]  458 	call	_memset
+    000001EC E8 06            [16]  459 	add	sp, #6
+                                    460 ;src/pathfinding/astar.c:86: heap_size = 0;
+    000001EE AF               [ 4]  461 	xor	a, a
+    000001EF EAr4Er03         [16]  462 	ld	(#_heap_size),a
+                                    463 ;src/pathfinding/astar.c:88: uint8_t si = IDX(sx, sy);
+    000001F2 78               [ 4]  464 	ld	a, b
+    000001F3 CB 37            [ 8]  465 	swap	a
+    000001F5 E6 F0            [ 8]  466 	and	a, #0xf0
+    000001F7 B1               [ 4]  467 	or	a, c
+    000001F8 5F               [ 4]  468 	ld	e, a
+                                    469 ;src/pathfinding/astar.c:89: node_g    [si] = 0;
+    000001F9 21r00r00         [12]  470 	ld	hl, #_node_g
+    000001FC 16 00            [ 8]  471 	ld	d, #0x00
+    000001FE 19               [ 8]  472 	add	hl, de
+    000001FF 36 00            [12]  473 	ld	(hl), #0x00
+                                    474 ;src/pathfinding/astar.c:90: node_flags[si] = FLAG_OPEN;
+    00000201 21r90r00         [12]  475 	ld	hl, #_node_flags
+    00000204 16 00            [ 8]  476 	ld	d, #0x00
+    00000206 19               [ 8]  477 	add	hl, de
+    00000207 36 01            [12]  478 	ld	(hl), #0x01
+                                    479 ;src/pathfinding/astar.c:91: node_par_x[si] = 0xFF;          /* sentinel: start tile has no parent */
+    00000209 21r20r01         [12]  480 	ld	hl, #_node_par_x
+    0000020C 16 00            [ 8]  481 	ld	d, #0x00
+    0000020E 19               [ 8]  482 	add	hl, de
+    0000020F 36 FF            [12]  483 	ld	(hl), #0xff
+                                    484 ;src/pathfinding/astar.c:92: heap_push(manhattan(sx, sy, gx, gy), sx, sy);
+    00000211 C5               [16]  485 	push	bc
+    00000212 F8 0F            [12]  486 	ldhl	sp,	#15
+    00000214 3A               [ 8]  487 	ld	a, (hl-)
+    00000215 57               [ 4]  488 	ld	d, a
+    00000216 5E               [ 8]  489 	ld	e, (hl)
+    00000217 D5               [16]  490 	push	de
+    00000218 58               [ 4]  491 	ld	e, b
+    00000219 79               [ 4]  492 	ld	a, c
+    0000021A CDrA8r01         [24]  493 	call	_manhattan
+    0000021D C1               [12]  494 	pop	bc
+    0000021E C5               [16]  495 	push	bc
+    0000021F 33               [ 8]  496 	inc	sp
+    00000220 59               [ 4]  497 	ld	e, c
+    00000221 CDr00r00         [24]  498 	call	_heap_push
+                                    499 ;src/pathfinding/astar.c:94: while (heap_size > 0) {
+    00000224                        500 00129$:
+    00000224 FAr4Er03         [16]  501 	ld	a, (#_heap_size)
+    00000227 B7               [ 4]  502 	or	a, a
+    00000228 CAr10r04         [16]  503 	jp	Z, 00131$
+                                    504 ;src/pathfinding/astar.c:96: heap_pop(&cx, &cy);
+    0000022B 21 01 00         [12]  505 	ld	hl, #1
+    0000022E 39               [ 8]  506 	add	hl, sp
+    0000022F 4D               [ 4]  507 	ld	c, l
+    00000230 44               [ 4]  508 	ld	b, h
+    00000231 21 00 00         [12]  509 	ld	hl, #0
+    00000234 39               [ 8]  510 	add	hl, sp
+    00000235 5D               [ 4]  511 	ld	e, l
+    00000236 54               [ 4]  512 	ld	d, h
+    00000237 CDrA0r00         [24]  513 	call	_heap_pop
+                                    514 ;src/pathfinding/astar.c:98: uint8_t ci = IDX(cx, cy);
+    0000023A F8 01            [12]  515 	ldhl	sp,	#1
+    0000023C 3A               [ 8]  516 	ld	a, (hl-)
+    0000023D CB 37            [ 8]  517 	swap	a
+    0000023F E6 F0            [ 8]  518 	and	a, #0xf0
+    00000241 B6               [ 8]  519 	or	a, (hl)
+    00000242 F8 09            [12]  520 	ldhl	sp,	#9
+    00000244 77               [ 8]  521 	ld	(hl), a
+                                    522 ;src/pathfinding/astar.c:101: if (node_flags[ci] & FLAG_CLOSED) continue;
+    00000245 11r90r00         [12]  523 	ld	de, #_node_flags
+    00000248 6E               [ 8]  524 	ld	l, (hl)
+    00000249 26 00            [ 8]  525 	ld	h, #0x00
+    0000024B 19               [ 8]  526 	add	hl, de
+    0000024C 4D               [ 4]  527 	ld	c, l
+    0000024D 44               [ 4]  528 	ld	b, h
+    0000024E 0A               [ 8]  529 	ld	a, (bc)
+    0000024F CB 4F            [ 8]  530 	bit	1, a
+    00000251 20 D1            [12]  531 	jr	NZ, 00129$
+                                    532 ;src/pathfinding/astar.c:102: node_flags[ci] = FLAG_CLOSED;
+    00000253 3E 02            [ 8]  533 	ld	a, #0x02
+    00000255 02               [ 8]  534 	ld	(bc), a
+                                    535 ;src/pathfinding/astar.c:104: if (cx == gx && cy == gy) {
+    00000256 F8 00            [12]  536 	ldhl	sp,	#0
+    00000258 7E               [ 8]  537 	ld	a, (hl)
+    00000259 F8 0C            [12]  538 	ldhl	sp,	#12
+    0000025B 96               [ 8]  539 	sub	a, (hl)
+    0000025C C2r39r03         [16]  540 	jp	NZ, 00114$
+    0000025F F8 01            [12]  541 	ldhl	sp,	#1
+    00000261 7E               [ 8]  542 	ld	a, (hl)
+    00000262 F8 0D            [12]  543 	ldhl	sp,	#13
+    00000264 96               [ 8]  544 	sub	a, (hl)
+    00000265 C2r39r03         [16]  545 	jp	NZ, 00114$
+                                    546 ;src/pathfinding/astar.c:108: uint8_t tx = gx, ty = gy;
+    00000268 F8 0C            [12]  547 	ldhl	sp,	#12
+    0000026A 7E               [ 8]  548 	ld	a, (hl)
+    0000026B F8 07            [12]  549 	ldhl	sp,	#7
+    0000026D 77               [ 8]  550 	ld	(hl), a
+    0000026E F8 04            [12]  551 	ldhl	sp,	#4
+    00000270 77               [ 8]  552 	ld	(hl), a
+    00000271 F8 0D            [12]  553 	ldhl	sp,	#13
+    00000273 7E               [ 8]  554 	ld	a, (hl)
+    00000274 F8 08            [12]  555 	ldhl	sp,	#8
+    00000276 77               [ 8]  556 	ld	(hl), a
+    00000277 3A               [ 8]  557 	ld	a, (hl-)
+    00000278 2B               [ 8]  558 	dec	hl
+    00000279 77               [ 8]  559 	ld	(hl), a
+                                    560 ;src/pathfinding/astar.c:109: while (len < ASTAR_MAX_PATH) {
+    0000027A F8 09            [12]  561 	ldhl	sp,	#9
+    0000027C 36 00            [12]  562 	ld	(hl), #0x00
+    0000027E                        563 00105$:
+    0000027E F8 09            [12]  564 	ldhl	sp,	#9
+    00000280 7E               [ 8]  565 	ld	a, (hl)
+    00000281 D6 20            [ 8]  566 	sub	a, #0x20
+    00000283 30 37            [12]  567 	jr	NC, 00155$
+                                    568 ;src/pathfinding/astar.c:110: ++len;
+    00000285 34               [12]  569 	inc	(hl)
+                                    570 ;src/pathfinding/astar.c:111: uint8_t px = node_par_x[IDX(tx, ty)];
+    00000286 F8 06            [12]  571 	ldhl	sp,	#6
+    00000288 3A               [ 8]  572 	ld	a, (hl-)
+    00000289 22               [ 8]  573 	ld	(hl+), a
+    0000028A AF               [ 4]  574 	xor	a, a
+    0000028B 32               [ 8]  575 	ld	(hl-), a
+    0000028C 3A               [ 8]  576 	ld	a, (hl-)
+    0000028D 5F               [ 4]  577 	ld	e, a
+    0000028E 16 00            [ 8]  578 	ld	d, #0x00
+    00000290 CB 23            [ 8]  579 	sla	e
+    00000292 CB 12            [ 8]  580 	rl	d
+    00000294 CB 23            [ 8]  581 	sla	e
+    00000296 CB 12            [ 8]  582 	rl	d
+    00000298 CB 23            [ 8]  583 	sla	e
+    0000029A CB 12            [ 8]  584 	rl	d
+    0000029C CB 23            [ 8]  585 	sla	e
+    0000029E CB 12            [ 8]  586 	rl	d
+    000002A0 4E               [ 8]  587 	ld	c, (hl)
+    000002A1 06 00            [ 8]  588 	ld	b, #0x00
+    000002A3 7B               [ 4]  589 	ld	a, e
+    000002A4 B1               [ 4]  590 	or	a, c
+    000002A5 5F               [ 4]  591 	ld	e, a
+    000002A6 21r20r01         [12]  592 	ld	hl, #_node_par_x
+    000002A9 19               [ 8]  593 	add	hl, de
+    000002AA 4E               [ 8]  594 	ld	c, (hl)
+                                    595 ;src/pathfinding/astar.c:112: if (px == 0xFF) break;
+    000002AB 79               [ 4]  596 	ld	a, c
+    000002AC 3C               [ 4]  597 	inc	a
+    000002AD 28 0D            [12]  598 	jr	Z, 00155$
+                                    599 ;src/pathfinding/astar.c:113: uint8_t py = node_par_y[IDX(tx, ty)];
+    000002AF 21rB0r01         [12]  600 	ld	hl, #_node_par_y
+    000002B2 19               [ 8]  601 	add	hl, de
+    000002B3 7E               [ 8]  602 	ld	a, (hl)
+    000002B4 F8 06            [12]  603 	ldhl	sp,	#6
+    000002B6 77               [ 8]  604 	ld	(hl), a
+                                    605 ;src/pathfinding/astar.c:114: tx = px; ty = py;
+    000002B7 F8 04            [12]  606 	ldhl	sp,	#4
+    000002B9 71               [ 8]  607 	ld	(hl), c
+    000002BA 18 C2            [12]  608 	jr	00105$
+    000002BC                        609 00155$:
+    000002BC F8 09            [12]  610 	ldhl	sp,	#9
+    000002BE 7E               [ 8]  611 	ld	a, (hl)
+    000002BF F8 02            [12]  612 	ldhl	sp,	#2
+    000002C1 77               [ 8]  613 	ld	(hl), a
+                                    614 ;src/pathfinding/astar.c:118: tx = gx; ty = gy;
+    000002C2 F8 07            [12]  615 	ldhl	sp,	#7
+    000002C4 7E               [ 8]  616 	ld	a, (hl)
+    000002C5 F8 03            [12]  617 	ldhl	sp,	#3
+    000002C7 77               [ 8]  618 	ld	(hl), a
+    000002C8 F8 08            [12]  619 	ldhl	sp,	#8
+    000002CA 7E               [ 8]  620 	ld	a, (hl)
+    000002CB F8 04            [12]  621 	ldhl	sp,	#4
+    000002CD 77               [ 8]  622 	ld	(hl), a
+                                    623 ;src/pathfinding/astar.c:119: while (i > 0) {
+    000002CE                        624 00110$:
+    000002CE F8 09            [12]  625 	ldhl	sp,	#9
+    000002D0 7E               [ 8]  626 	ld	a, (hl)
+    000002D1 B7               [ 4]  627 	or	a, a
+    000002D2 28 5F            [12]  628 	jr	Z, 00112$
+                                    629 ;src/pathfinding/astar.c:120: --i;
+    000002D4 35               [12]  630 	dec	(hl)
+                                    631 ;src/pathfinding/astar.c:121: out_path[i].x = tx;
+    000002D5 3A               [ 8]  632 	ld	a, (hl-)
+    000002D6 2B               [ 8]  633 	dec	hl
+    000002D7 22               [ 8]  634 	ld	(hl+), a
+    000002D8 AF               [ 4]  635 	xor	a, a
+    000002D9 32               [ 8]  636 	ld	(hl-), a
+    000002DA 3A               [ 8]  637 	ld	a, (hl-)
+    000002DB 2B               [ 8]  638 	dec	hl
+    000002DC 22               [ 8]  639 	ld	(hl+), a
+    000002DD AF               [ 4]  640 	xor	a, a
+    000002DE 32               [ 8]  641 	ld	(hl-), a
+    000002DF CB 26            [16]  642 	sla	(hl)
+    000002E1 23               [ 8]  643 	inc	hl
+    000002E2 CB 16            [16]  644 	rl	(hl)
+    000002E4 2B               [ 8]  645 	dec	hl
+    000002E5 2A               [ 8]  646 	ld	a, (hl+)
+    000002E6 5F               [ 4]  647 	ld	e, a
+    000002E7 56               [ 8]  648 	ld	d, (hl)
+    000002E8 F8 10            [12]  649 	ldhl	sp,	#16
+    000002EA 2A               [ 8]  650 	ld	a,	(hl+)
+    000002EB 66               [ 8]  651 	ld	h, (hl)
+    000002EC 6F               [ 4]  652 	ld	l, a
+    000002ED 19               [ 8]  653 	add	hl, de
+    000002EE E5               [16]  654 	push	hl
+    000002EF 7D               [ 4]  655 	ld	a, l
+    000002F0 F8 09            [12]  656 	ldhl	sp,	#9
+    000002F2 77               [ 8]  657 	ld	(hl), a
+    000002F3 E1               [12]  658 	pop	hl
+    000002F4 7C               [ 4]  659 	ld	a, h
+    000002F5 F8 08            [12]  660 	ldhl	sp,	#8
+    000002F7 32               [ 8]  661 	ld	(hl-), a
+    000002F8 2A               [ 8]  662 	ld	a, (hl+)
+    000002F9 5F               [ 4]  663 	ld	e, a
+    000002FA 56               [ 8]  664 	ld	d, (hl)
+    000002FB F8 03            [12]  665 	ldhl	sp,	#3
+    000002FD 7E               [ 8]  666 	ld	a, (hl)
+    000002FE 12               [ 8]  667 	ld	(de), a
+                                    668 ;src/pathfinding/astar.c:122: out_path[i].y = ty;
+    000002FF F8 07            [12]  669 	ldhl	sp,	#7
+    00000301 2A               [ 8]  670 	ld	a, (hl+)
+    00000302 4F               [ 4]  671 	ld	c, a
+    00000303 46               [ 8]  672 	ld	b, (hl)
+    00000304 03               [ 8]  673 	inc	bc
+    00000305 F8 04            [12]  674 	ldhl	sp,	#4
+    00000307 7E               [ 8]  675 	ld	a, (hl)
+    00000308 02               [ 8]  676 	ld	(bc), a
+                                    677 ;src/pathfinding/astar.c:123: uint8_t px = node_par_x[IDX(tx, ty)];
+    00000309 3A               [ 8]  678 	ld	a, (hl-)
+    0000030A 16 00            [ 8]  679 	ld	d, #0x00
+    0000030C 87               [ 4]  680 	add	a, a
+    0000030D CB 12            [ 8]  681 	rl	d
+    0000030F 87               [ 4]  682 	add	a, a
+    00000310 CB 12            [ 8]  683 	rl	d
+    00000312 87               [ 4]  684 	add	a, a
+    00000313 CB 12            [ 8]  685 	rl	d
+    00000315 87               [ 4]  686 	add	a, a
+    00000316 CB 12            [ 8]  687 	rl	d
+    00000318 4E               [ 8]  688 	ld	c, (hl)
+    00000319 06 00            [ 8]  689 	ld	b, #0x00
+    0000031B B1               [ 4]  690 	or	a, c
+    0000031C 5F               [ 4]  691 	ld	e, a
+    0000031D 21r20r01         [12]  692 	ld	hl, #_node_par_x
+    00000320 19               [ 8]  693 	add	hl, de
+    00000321 4E               [ 8]  694 	ld	c, (hl)
+                                    695 ;src/pathfinding/astar.c:124: if (px == 0xFF) break;
+    00000322 79               [ 4]  696 	ld	a, c
+    00000323 3C               [ 4]  697 	inc	a
+    00000324 28 0D            [12]  698 	jr	Z, 00112$
+                                    699 ;src/pathfinding/astar.c:125: uint8_t py = node_par_y[IDX(tx, ty)];
+    00000326 21rB0r01         [12]  700 	ld	hl, #_node_par_y
+    00000329 19               [ 8]  701 	add	hl, de
+    0000032A 7E               [ 8]  702 	ld	a, (hl)
+    0000032B F8 04            [12]  703 	ldhl	sp,	#4
+    0000032D 77               [ 8]  704 	ld	(hl), a
+                                    705 ;src/pathfinding/astar.c:126: tx = px; ty = py;
+    0000032E F8 03            [12]  706 	ldhl	sp,	#3
+    00000330 71               [ 8]  707 	ld	(hl), c
+    00000331 18 9B            [12]  708 	jr	00110$
+    00000333                        709 00112$:
+                                    710 ;src/pathfinding/astar.c:128: return len;
+    00000333 F8 02            [12]  711 	ldhl	sp,	#2
+    00000335 7E               [ 8]  712 	ld	a, (hl)
+    00000336 C3r11r04         [16]  713 	jp	00133$
+    00000339                        714 00114$:
+                                    715 ;src/pathfinding/astar.c:132: uint8_t cg  = node_g[ci];
+    00000339 11r00r00         [12]  716 	ld	de, #_node_g
+    0000033C F8 09            [12]  717 	ldhl	sp,	#9
+    0000033E 6E               [ 8]  718 	ld	l, (hl)
+    0000033F 26 00            [ 8]  719 	ld	h, #0x00
+    00000341 19               [ 8]  720 	add	hl, de
+    00000342 4D               [ 4]  721 	ld	c, l
+    00000343 44               [ 4]  722 	ld	b, h
+    00000344 0A               [ 8]  723 	ld	a, (bc)
+                                    724 ;src/pathfinding/astar.c:134: for (dir = 0; dir < 4; ++dir) {
+    00000345 4F               [ 4]  725 	ld	c, a
+    00000346 0C               [ 4]  726 	inc	c
+    00000347 06 00            [ 8]  727 	ld	b, #0x00
+    00000349                        728 00132$:
+                                    729 ;src/pathfinding/astar.c:135: int8_t nx = (int8_t)cx + DIR_DX[dir];
+    00000349 F8 00            [12]  730 	ldhl	sp,	#0
+    0000034B 5E               [ 8]  731 	ld	e, (hl)
+    0000034C 3Er17            [ 8]  732 	ld	a, #<(_DIR_DX)
+    0000034E 80               [ 4]  733 	add	a, b
+    0000034F 6F               [ 4]  734 	ld	l, a
+    00000350 3Es04            [ 8]  735 	ld	a, #>(_DIR_DX)
+    00000352 CE 00            [ 8]  736 	adc	a, #0x00
+    00000354 67               [ 4]  737 	ld	h, a
+    00000355 7E               [ 8]  738 	ld	a, (hl)
+    00000356 83               [ 4]  739 	add	a, e
+    00000357 F8 08            [12]  740 	ldhl	sp,	#8
+    00000359 77               [ 8]  741 	ld	(hl), a
+                                    742 ;src/pathfinding/astar.c:136: int8_t ny = (int8_t)cy + DIR_DY[dir];
+    0000035A F8 01            [12]  743 	ldhl	sp,	#1
+    0000035C 5E               [ 8]  744 	ld	e, (hl)
+    0000035D 3Er1B            [ 8]  745 	ld	a, #<(_DIR_DY)
+    0000035F 80               [ 4]  746 	add	a, b
+    00000360 6F               [ 4]  747 	ld	l, a
+    00000361 3Es04            [ 8]  748 	ld	a, #>(_DIR_DY)
+    00000363 CE 00            [ 8]  749 	adc	a, #0x00
+    00000365 67               [ 4]  750 	ld	h, a
+    00000366 7E               [ 8]  751 	ld	a, (hl)
+    00000367 83               [ 4]  752 	add	a, e
+    00000368 F8 09            [12]  753 	ldhl	sp,	#9
+                                    754 ;src/pathfinding/astar.c:137: if (nx < 0 || ny < 0 ||
+    0000036A 32               [ 8]  755 	ld	(hl-), a
+    0000036B CB 7E            [12]  756 	bit	7, (hl)
+    0000036D C2r06r04         [16]  757 	jp	NZ, 00127$
+    00000370 23               [ 8]  758 	inc	hl
+    00000371 CB 7E            [12]  759 	bit	7, (hl)
+    00000373 C2r06r04         [16]  760 	jp	NZ, 00127$
+                                    761 ;src/pathfinding/astar.c:138: nx >= (int8_t)ASTAR_GRID_W ||
+    00000376 2B               [ 8]  762 	dec	hl
+    00000377 7E               [ 8]  763 	ld	a, (hl)
+    00000378 EE 80            [ 8]  764 	xor	a, #0x80
+    0000037A D6 8A            [ 8]  765 	sub	a, #0x8a
+    0000037C D2r06r04         [16]  766 	jp	NC, 00127$
+                                    767 ;src/pathfinding/astar.c:139: ny >= (int8_t)ASTAR_GRID_H)
+    0000037F 23               [ 8]  768 	inc	hl
+    00000380 7E               [ 8]  769 	ld	a, (hl)
+    00000381 EE 80            [ 8]  770 	xor	a, #0x80
+    00000383 D6 89            [ 8]  771 	sub	a, #0x89
+    00000385 D2r06r04         [16]  772 	jp	NC, 00127$
+                                    773 ;src/pathfinding/astar.c:142: uint8_t ux = (uint8_t)nx;
+    00000388 2B               [ 8]  774 	dec	hl
+    00000389 3A               [ 8]  775 	ld	a, (hl-)
+                                    776 ;src/pathfinding/astar.c:143: uint8_t uy = (uint8_t)ny;
+    0000038A 22               [ 8]  777 	ld	(hl+), a
+    0000038B 23               [ 8]  778 	inc	hl
+    0000038C 3A               [ 8]  779 	ld	a, (hl-)
+                                    780 ;src/pathfinding/astar.c:144: uint8_t ni = IDX(ux, uy);
+    0000038D 32               [ 8]  781 	ld	(hl-), a
+    0000038E CB 37            [ 8]  782 	swap	a
+    00000390 E6 F0            [ 8]  783 	and	a, #0xf0
+    00000392 B6               [ 8]  784 	or	a, (hl)
+    00000393 23               [ 8]  785 	inc	hl
+    00000394 23               [ 8]  786 	inc	hl
+    00000395 77               [ 8]  787 	ld	(hl), a
+                                    788 ;src/pathfinding/astar.c:146: if (node_flags[ni] & FLAG_CLOSED) continue;
+    00000396 11r90r00         [12]  789 	ld	de, #_node_flags
+    00000399 6E               [ 8]  790 	ld	l, (hl)
+    0000039A 26 00            [ 8]  791 	ld	h, #0x00
+    0000039C 19               [ 8]  792 	add	hl, de
+    0000039D 5D               [ 4]  793 	ld	e, l
+    0000039E 54               [ 4]  794 	ld	d, h
+    0000039F 1A               [ 8]  795 	ld	a, (de)
+    000003A0 CB 4F            [ 8]  796 	bit	1, a
+    000003A2 20 62            [12]  797 	jr	NZ, 00127$
+                                    798 ;src/pathfinding/astar.c:147: if (!walkable(ux, uy))            continue;
+    000003A4 C5               [16]  799 	push	bc
+    000003A5 F8 0A            [12]  800 	ldhl	sp,	#10
+    000003A7 3A               [ 8]  801 	ld	a, (hl-)
+    000003A8 5F               [ 4]  802 	ld	e, a
+    000003A9 7E               [ 8]  803 	ld	a, (hl)
+    000003AA F5               [16]  804 	push	af
+    000003AB F8 12            [12]  805 	ldhl	sp,	#18
+    000003AD 2A               [ 8]  806 	ld	a, (hl+)
+    000003AE 66               [ 8]  807 	ld	h, (hl)
+    000003AF 6F               [ 4]  808 	ld	l, a
+    000003B0 F1               [12]  809 	pop	af
+    000003B1 CDr00r00         [24]  810 	call	___sdcc_call_hl
+    000003B4 C1               [12]  811 	pop	bc
+    000003B5 B7               [ 4]  812 	or	a, a
+    000003B6 28 4E            [12]  813 	jr	Z, 00127$
+                                    814 ;src/pathfinding/astar.c:150: if (ng < node_g[ni]) {
+    000003B8 11r00r00         [12]  815 	ld	de, #_node_g
+    000003BB F8 09            [12]  816 	ldhl	sp,	#9
+    000003BD 6E               [ 8]  817 	ld	l, (hl)
+    000003BE 26 00            [ 8]  818 	ld	h, #0x00
+    000003C0 19               [ 8]  819 	add	hl, de
+    000003C1 5D               [ 4]  820 	ld	e, l
+    000003C2 54               [ 4]  821 	ld	d, h
+    000003C3 1A               [ 8]  822 	ld	a, (de)
+    000003C4 6F               [ 4]  823 	ld	l, a
+                                    824 ;src/pathfinding/astar.c:151: node_g    [ni] = ng;
+    000003C5 79               [ 4]  825 	ld	a,c
+    000003C6 BD               [ 4]  826 	cp	a,l
+    000003C7 30 3D            [12]  827 	jr	NC, 00127$
+    000003C9 12               [ 8]  828 	ld	(de), a
+                                    829 ;src/pathfinding/astar.c:152: node_par_x[ni] = cx;
+    000003CA 11r20r01         [12]  830 	ld	de, #_node_par_x
+    000003CD F8 09            [12]  831 	ldhl	sp,	#9
+    000003CF 6E               [ 8]  832 	ld	l, (hl)
+    000003D0 26 00            [ 8]  833 	ld	h, #0x00
+    000003D2 19               [ 8]  834 	add	hl, de
+    000003D3 5D               [ 4]  835 	ld	e, l
+    000003D4 54               [ 4]  836 	ld	d, h
+    000003D5 F8 00            [12]  837 	ldhl	sp,	#0
+    000003D7 7E               [ 8]  838 	ld	a, (hl)
+    000003D8 12               [ 8]  839 	ld	(de), a
+                                    840 ;src/pathfinding/astar.c:153: node_par_y[ni] = cy;
+    000003D9 11rB0r01         [12]  841 	ld	de, #_node_par_y
+    000003DC F8 09            [12]  842 	ldhl	sp,	#9
+    000003DE 6E               [ 8]  843 	ld	l, (hl)
+    000003DF 26 00            [ 8]  844 	ld	h, #0x00
+    000003E1 19               [ 8]  845 	add	hl, de
+    000003E2 5D               [ 4]  846 	ld	e, l
+    000003E3 54               [ 4]  847 	ld	d, h
+    000003E4 F8 01            [12]  848 	ldhl	sp,	#1
+    000003E6 7E               [ 8]  849 	ld	a, (hl)
+    000003E7 12               [ 8]  850 	ld	(de), a
+                                    851 ;src/pathfinding/astar.c:155: heap_push(ng + manhattan(ux, uy, gx, gy), ux, uy);
+    000003E8 C5               [16]  852 	push	bc
+    000003E9 F8 0F            [12]  853 	ldhl	sp,	#15
+    000003EB 3A               [ 8]  854 	ld	a, (hl-)
+    000003EC 57               [ 4]  855 	ld	d, a
+    000003ED 5E               [ 8]  856 	ld	e, (hl)
+    000003EE D5               [16]  857 	push	de
+    000003EF F8 0C            [12]  858 	ldhl	sp,	#12
+    000003F1 3A               [ 8]  859 	ld	a, (hl-)
+    000003F2 5F               [ 4]  860 	ld	e, a
+    000003F3 7E               [ 8]  861 	ld	a, (hl)
+    000003F4 CDrA8r01         [24]  862 	call	_manhattan
+    000003F7 C1               [12]  863 	pop	bc
+    000003F8 81               [ 4]  864 	add	a, c
+    000003F9 C5               [16]  865 	push	bc
+    000003FA F8 0A            [12]  866 	ldhl	sp,	#10
+    000003FC 66               [ 8]  867 	ld	h, (hl)
+    000003FD E5               [16]  868 	push	hl
+    000003FE 33               [ 8]  869 	inc	sp
+    000003FF F8 0A            [12]  870 	ldhl	sp,	#10
+    00000401 5E               [ 8]  871 	ld	e, (hl)
+    00000402 CDr00r00         [24]  872 	call	_heap_push
+    00000405 C1               [12]  873 	pop	bc
+    00000406                        874 00127$:
+                                    875 ;src/pathfinding/astar.c:134: for (dir = 0; dir < 4; ++dir) {
+    00000406 04               [ 4]  876 	inc	b
+    00000407 78               [ 4]  877 	ld	a, b
+    00000408 D6 04            [ 8]  878 	sub	a, #0x04
+    0000040A DAr49r03         [16]  879 	jp	C, 00132$
+    0000040D C3r24r02         [16]  880 	jp	00129$
+    00000410                        881 00131$:
+                                    882 ;src/pathfinding/astar.c:160: return 0;   /* no path found */
+    00000410 AF               [ 4]  883 	xor	a, a
+    00000411                        884 00133$:
+                                    885 ;src/pathfinding/astar.c:161: }
+    00000411 E8 0A            [16]  886 	add	sp, #10
+    00000413 E1               [12]  887 	pop	hl
+    00000414 E8 06            [16]  888 	add	sp, #6
+    00000416 E9               [ 4]  889 	jp	(hl)
+    00000417                        890 _DIR_DX:
+    00000417 00                     891 	.db #0x00	;  0
+    00000418 00                     892 	.db #0x00	;  0
+    00000419 FF                     893 	.db #0xff	; -1
+    0000041A 01                     894 	.db #0x01	;  1
+    0000041B                        895 _DIR_DY:
+    0000041B FF                     896 	.db #0xff	; -1
+    0000041C 01                     897 	.db #0x01	;  1
+    0000041D 00                     898 	.db #0x00	;  0
+    0000041E 00                     899 	.db #0x00	;  0
+                                    900 	.area _CODE_1
+                                    901 	.area _INITIALIZER
+                                    902 	.area _CABS (ABS)

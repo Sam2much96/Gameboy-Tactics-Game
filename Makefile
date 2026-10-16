@@ -11,9 +11,14 @@ LFLAGS = -Wl-yt1 -Wl-yo4 -Wl-ya0
 
 TARGET = my_game.gb
 
-OBJS = src/main.o src/tileset.o src/levels/level1.o \
+OBJS = src/main.o src/fade.o src/music.o src/tileset.o src/levels/level1.o \
        src/UI/UI.o src/UI/ui_text.o src/UI/ui_pointer.o \
-       src/pathfinding/astar.o \
+       src/UI/battle_menu.o src/UI/dialogue.o \
+       src/pathfinding/astar.o src/grid/grid.o \
+       src/characters/unit.o src/characters/unit_stats.o \
+       src/characters/player_anim.o \
+       src/weapons/weapon_fx.o \
+       src/battle/battle.o \
        src/titlescreen/titlescreen.o \
        src/gbt_player.o src/gbt_player_bank1.o \
        output.o
@@ -29,10 +34,10 @@ $(TARGET): $(OBJS)
 %.o: %.s
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-src/main.o: src/main.c src/tileset.h src/levels/level1.h src/gbt_player.h \
-            src/titlescreen/titlescreen.h \
-            src/characters/player.c src/characters/player_character.c \
-            src/characters/player_anim.c src/characters/player_anim.h
+src/main.o: src/main.c src/gbt_player.h src/fade.h src/battle/battle.h \
+            src/titlescreen/titlescreen.h
+src/fade.o: src/fade.c src/fade.h
+src/music.o: src/music.c src/music.h src/gbt_player.h
 src/tileset.o: src/tileset.c src/tileset.h
 src/levels/level1.o: src/levels/level1.c src/levels/level1.h
 src/UI/UI.o: src/UI/UI.c src/UI/UI.h
@@ -43,7 +48,31 @@ src/UI/ui_text.o: src/UI/ui_text.c src/UI/ui_text.h \
 src/UI/ui_pointer.o: src/UI/ui_pointer.c src/UI/ui_pointer.h \
                      src/UI/pointer\ tiles/PointerSprites.c \
                      src/UI/pointer\ tiles/PointerSprites.h
+src/UI/battle_menu.o: src/UI/battle_menu.c src/UI/battle_menu.h src/UI/UI.h \
+                     src/UI/ui_text.h src/UI/ui_pointer.h src/characters/unit.h
+src/UI/dialogue.o: src/UI/dialogue.c src/UI/dialogue.h src/UI/battle_menu.h \
+                   src/UI/ui_text.h src/UI/dialogue_ui/DialogueBox.c \
+                   src/UI/dialogue_ui/DialogueBox.h
 src/pathfinding/astar.o: src/pathfinding/astar.c src/pathfinding/astar.h
+src/grid/grid.o: src/grid/grid.c src/grid/grid.h src/pathfinding/astar.h \
+                 src/UI/ui_text.h
+src/characters/unit.o: src/characters/unit.c src/characters/unit.h \
+                       src/characters/player_character.c \
+                       src/characters/player_anim.h src/characters/unit_stats.h \
+                       src/characters/player.c src/characters/Enemy1.c \
+                       src/characters/Enemy1.h src/grid/grid.h src/UI/ui_text.h
+src/characters/unit_stats.o: src/characters/unit_stats.c src/characters/unit_stats.h
+src/characters/player_anim.o: src/characters/player_anim.c \
+                              src/characters/player_anim.h src/UI/ui_text.h
+src/weapons/weapon_fx.o: src/weapons/weapon_fx.c src/weapons/weapon_fx.h \
+                         src/weapons/weapons.c src/weapons/weapons.h \
+                         src/UI/ui_text.h src/characters/player_anim.h
+src/battle/battle.o: src/battle/battle.c src/battle/battle.h src/music.h \
+                     src/fade.h src/tileset.h src/grid/grid.h \
+                     src/pathfinding/astar.h src/UI/ui_text.h \
+                     src/UI/battle_menu.h src/UI/dialogue.h \
+                     src/characters/unit.h src/characters/unit_stats.h \
+                     src/characters/player_anim.h src/weapons/weapon_fx.h
 src/titlescreen/titlescreen.o: src/titlescreen/titlescreen.c \
                                src/titlescreen/titlescreen.h \
                                src/titlescreen/titlescreen_data.c \
@@ -122,4 +151,8 @@ clean:
 	rm -f src/levels/*.o src/levels/*.lst src/levels/*.sym src/levels/*.map src/levels/*.asm
 	rm -f src/UI/*.o src/UI/*.lst src/UI/*.sym src/UI/*.map src/UI/*.asm
 	rm -f src/pathfinding/*.o src/pathfinding/*.lst src/pathfinding/*.sym src/pathfinding/*.map src/pathfinding/*.asm
+	rm -f src/grid/*.o src/grid/*.lst src/grid/*.sym src/grid/*.map src/grid/*.asm
+	rm -f src/characters/*.o src/characters/*.lst src/characters/*.sym src/characters/*.map src/characters/*.asm
+	rm -f src/weapons/*.o src/weapons/*.lst src/weapons/*.sym src/weapons/*.map src/weapons/*.asm
+	rm -f src/battle/*.o src/battle/*.lst src/battle/*.sym src/battle/*.map src/battle/*.asm
 	rm -f output.o output.c output.h output.lst output.sym

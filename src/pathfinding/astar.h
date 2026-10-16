@@ -3,13 +3,14 @@
 
 #include <gb/gb.h>
 
-/* Grid dimensions — must match GRID_SIZE in main.c */
-#define ASTAR_GRID_W  15
-#define ASTAR_GRID_H  15
+/* Grid dimensions — must match GRID_W / GRID_H in grid/grid.h
+   (10×9 cells of 16 px — the whole screen). */
+#define ASTAR_GRID_W  10
+#define ASTAR_GRID_H  9
 
 /* Maximum path length returned.
-   Longest possible route on a 15x15 grid is 28 steps (corner to corner);
-   32 gives a safe margin without wasting WRAM. */
+   Longest open-grid route on 10x9 is 17 steps (corner to corner); 32
+   leaves room for detours around units without wasting WRAM. */
 #define ASTAR_MAX_PATH  32
 
 /* One step in the returned path. */
@@ -21,10 +22,7 @@ typedef struct {
 /*
  * Walkability callback.  Return non-zero if tile (x,y) can be traversed.
  *
- * Typical implementation in main.c:
- *   uint8_t is_walkable(uint8_t x, uint8_t y) {
- *       return grid[x][y].type == TILE_GRASS;
- *   }
+ * Implementation: grid.c's path_walkable() (terrain + unit blockers).
  */
 typedef uint8_t (*astar_walkable_fn)(uint8_t x, uint8_t y);
 
